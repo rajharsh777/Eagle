@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Eagle YT World</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #00eaff;
+  --neon: #ff00cc;
+  --glow: #fff200;
+  --dark-bg: #191825;
+  --light-bg: #f5f5fa;
+  --neon-glow: 0 0 10px #ff00cc, 0 0 20px #00eaff, 0 0 25px #fff200;
+  --folder-gradient: linear-gradient(90deg, #00eaff 2%, #ff00cc 98%);
+  --folder-gradient-night: linear-gradient(90deg, #212F3C 2%, #4A235A 98%);
+  --text-glow: 0 0 2px #fff, 0 0 16px #ff00cc, 0 0 8px #00eaff;
+  --btn-shadow: 0 0 10px #00eaff88, 0 0 20px #ff00cc66;
+}
+body {
+  margin:0; padding:0; min-height:100vh;
+  font-family:'Montserrat', 'Segoe UI', Arial, sans-serif;
+  background: var(--light-bg);
+  transition: background 0.5s;
+}
+.night body, .night {
+  background: var(--dark-bg) !important;
+}
+.page {
+  display:none;
+  min-height:100vh;
+  width:100vw;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  position:relative;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transition:background-image 0.6s, background 0.6s;
+}
+.active { display:flex; }
+.centered { display:flex; flex-direction:column; align-items:center; justify-content:center; width:100vw; min-height:100vh; }
+.logo {
+  width:120px; height:120px;
+  border-radius:50%; box-shadow:0 4px 18px #00eaff99;
+  background:#fff; object-fit:cover; margin:0 auto 22px auto;
+  border: 5px solid var(--neon);
+  animation: logoPulse 2s infinite alternate;
+}
+@keyframes logoPulse {
+  from { box-shadow:0 0 20px #ff00cc99, 0 0 40px #00eaff88; }
+  to { box-shadow:0 0 40px #fff200aa, 0 0 80px #ff00cc88; }
+}
+.welcome-title {
+  font-family: 'Orbitron', 'Montserrat', sans-serif;
+  font-size:2.6em; color:var(--primary); font-weight:900;
+  letter-spacing:2.5px; text-align:center; margin-bottom:18px;
+  text-shadow:var(--neon-glow);
+  animation: textPop 1.8s cubic-bezier(.23,1.25,.32,1.1) 1;
+}
+@keyframes textPop {
+  0% { opacity:0; transform:scale(0.7);}
+  60% { opacity:1; transform:scale(1.09);}
+  100% {opacity:1; transform:scale(1);}
+}
+.neon-btn, .back-btn, .toggle-mode-btn {
+  font-family: 'Orbitron', 'Montserrat', sans-serif;
+  border:none; outline:none;
+  font-size:1.18em; font-weight:700; letter-spacing:1.5px;
+  padding:16px 36px; border-radius:16px;
+  color:#fff; background:var(--folder-gradient);
+  cursor:pointer; margin:14px 0 0 0;
+  box-shadow:var(--btn-shadow);
+  transition: background 0.2s, color 0.2s, box-shadow 0.3s;
+  position:relative; overflow:hidden;
+}
+.neon-btn:hover, .back-btn:hover, .toggle-mode-btn:hover {
+  background:linear-gradient(90deg,#fff200,#ff00cc 80%);
+  color:#222; box-shadow:0 0 40px #fff200, 0 0 16px #ff00cc;
+}
+.back-btn {
+  position:fixed; left:18px; top:18px;
+  padding:10px 28px; z-index:11; font-size:1.08em;
+  background:var(--folder-gradient);
+}
+.toggle-mode-btn {
+  position:fixed; right:18px; top:18px; z-index:11; background:var(--folder-gradient);
+  padding:10px 22px; font-size:1.13em;
+}
+.night .toggle-mode-btn { background:var(--folder-gradient-night); }
+.night .neon-btn, .night .back-btn { background:var(--folder-gradient-night); }
+.night .folder { background:rgba(30,34,60,0.92);}
+.night .main-title, .night .section-label, .night .countdown, .night .folder-title { color:#fff; text-shadow:0 0 6px #fff200; }
+.login-container {
+  background:rgba(35,35,55,0.95);
+  padding:35px 28px; border-radius:18px;
+  box-shadow:0 8px 40px #00eaff99;
+  animation: loginShow 1s;
+}
+@keyframes loginShow {
+  0% {opacity:0;transform:scale(0.7);}
+  70%{opacity:1;transform:scale(1.1);}
+  100%{opacity:1;transform:scale(1);}
+}
+.login-title {
+  font-family: 'Orbitron', 'Montserrat', sans-serif;
+  font-size:1.7em; font-weight:bold; color:var(--primary);
+  margin-bottom:18px; text-align:center;
+  text-shadow:var(--text-glow);
+}
+.login-input {
+  display:block; width:260px; padding:12px 14px;
+  margin:12px auto 0 auto; font-size:1.1em;
+  border-radius:10px; border:2px solid var(--primary);
+  background:rgba(255,255,255,0.9); outline: none;
+  font-weight:700; color:#222; transition:border 0.2s;
+}
+.login-input:focus {
+  border:2px solid var(--neon);
+  background:#fff;
+}
+.login-btn {
+  background:var(--folder-gradient); margin:22px auto 0 auto;
+  color:#fff;
+  padding:12px 38px;
+  font-size:1.13em;
+  font-family:'Orbitron',sans-serif;
+  font-weight:900;
+  border-radius:13px;
+  box-shadow:0 0 14px #ff00cc66,0 0 6px #fff20055;
+}
+.login-btn:hover { background:linear-gradient(90deg,#fff200,#ff00cc 80%); color:#212F3C;}
+.login-error {
+  margin-top:12px; color:#fff200; font-weight:bold; text-align:center; text-shadow:0 0 6px #ff1744;
+  font-family:'Orbitron',sans-serif;
+}
+.countdown {
+  max-width:100vw; background:rgba(0,234,255,0.1);
+  color:var(--neon); font-size:1.22em; font-weight:800;
+  text-align:center; letter-spacing:1.5px;
+  padding:13px 0 11px 0; margin-bottom:18px;
+  border-bottom:3px double #fff200; border-radius:0 0 20px 20px;
+  box-shadow:0 2px 20px #00eaff44;
+  font-family:'Orbitron',sans-serif;
+  animation: textPop 1.2s;
+}
+.countdown-number {
+  display:inline-block; min-width:36px; margin:0 2px;
+  background:linear-gradient(90deg,#fff200,#ff00cc 90%);
+  color:#212F3C;
+  padding:6px 10px; border-radius:8px;
+  font-size:1.19em; box-shadow:0 0 12px #fff20088;
+  font-family:'Orbitron',sans-serif;
+  animation:countNum 0.9s;
+}
+@keyframes countNum {0%{transform:scale(1.3);}100%{transform:scale(1);}}
+.section-container { width:96vw; max-width:700px; margin:0 auto;}
+.thumb-top {text-align:center; margin-top:18px;}
+.thumb-top img {width:120px; height:120px; border-radius:18px; object-fit:cover; box-shadow:0 2px 14px #3949ab44;}
+.main-title {
+  font-family:'Orbitron',sans-serif; font-size:2em;
+  color:var(--primary); font-weight:900;
+  text-align:center; margin-bottom:22px; margin-top:8px;
+  letter-spacing:2px; text-shadow:var(--neon-glow);
+}
+.folder-list {display:flex; flex-direction:column; gap:22px;}
+.folder {
+  background:rgba(255,255,255,0.96);
+  border-radius:20px;
+  padding:0;
+  box-shadow:0 3px 20px #ff00cc22;
+  margin-bottom:2px;
+  border: 3.2px solid transparent;
+  background-clip: padding-box;
+  transition:box-shadow 0.18s, border 0.24s;
+  position:relative;
+  overflow:hidden;
+}
+.folder-title-row {
+  padding:24px 24px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  font-size:1.22em;
+  user-select:none;
+  font-family:'Orbitron',sans-serif;
+  font-weight:900;
+  color:var(--primary);
+  background: var(--folder-gradient);
+  box-shadow:0 0 16px #ff00cc44;
+  border-bottom:2px solid #fff20099;
+  transition:background 0.24s;
+}
+.folder.open .folder-title-row, .folder-title-row:hover {
+  background:linear-gradient(90deg,#fff200 10%,#ff00cc 80%);
+  color:#212F3C;
+}
+.folder-title {
+  flex:1; letter-spacing:2px; font-size:1.13em; text-shadow:var(--text-glow);
+}
+.arrow {
+  font-size:1.25em; color:#fff; margin-left:10px;
+  transition:transform 0.23s;
+  filter: drop-shadow(0 0 6px #00eaff);
+}
+.folder.open .arrow {transform:rotate(90deg);}
+.folder-content {padding:18px 26px 18px 26px;display:none;}
+.folder.open .folder-content {display:block;}
+.section-label {
+  font-size:1.12em; font-weight:800; color:var(--neon);
+  margin-bottom:7px;margin-top:18px;
+  text-shadow:0 0 12px #fff200;
+  font-family:'Orbitron',sans-serif;
+  letter-spacing:1.2px;
+}
+.video-link-btn, .pdf-link-btn, .youtube-btn {
+  background:linear-gradient(90deg,#fff200 40%,#00eaff 100%);
+  color:#222; border-radius:10px; font-size:1em; font-weight:bold;
+  padding:10px 19px; border:2px solid #00eaff; cursor:pointer;
+  transition:background 0.16s,color 0.16s,box-shadow 0.18s;
+  margin-right:7px; margin-bottom:8px; display:inline-block;
+  box-shadow:0 0 12px #fff20055;
+  font-family:'Orbitron',sans-serif;
+}
+.video-link-btn:hover {background:linear-gradient(90deg,#ff00cc,#00eaff);}
+.pdf-link-btn {border-color:#fff200;}
+.pdf-link-btn:hover {background:linear-gradient(90deg,#00eaff,#fff200);}
+.youtube-btn {
+  background:linear-gradient(90deg,#ff0000 40%,#ff9100 100%);
+  color:#fff; border-color:#ff0000; font-weight:bold;
+  margin-left:0; box-shadow:0 0 12px #ff000088;
+}
+.youtube-btn:hover {background:linear-gradient(90deg,#fff200,#ff0000);}
+.night .folder {background:rgba(30,34,60,0.98);}
+.night .folder-title-row {background:var(--folder-gradient-night);}
+.night .folder.open .folder-title-row, .night .folder-title-row:hover {background:linear-gradient(90deg,#fff200 10%,#3949ab 80%);}
+.night .video-link-btn, .night .pdf-link-btn {color:#fff;background:linear-gradient(90deg,#3949ab,#00eaff);}
+.night .video-link-btn:hover{background:linear-gradient(90deg,#fff200,#00eaff);}
+.night .pdf-link-btn:hover{background:linear-gradient(90deg,#00eaff,#fff200);}
+.night .youtube-btn{background:linear-gradient(90deg,#ff0000,#3949ab);}
+.night .youtube-btn:hover{background:linear-gradient(90deg,#fff200,#ff0000);}
+.video-modal-bg {position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,44,80,0.44);display:none;align-items:center;justify-content:center;z-index:200;}
+.video-modal {
+  background:rgba(15,17,30,0.98);
+  border-radius:22px;
+  padding:18px 18px 12px 18px;
+  box-shadow:0 8px 38px #00eaff99;
+  max-width:98vw;
+  border: 2.5px solid #fff200;
+}
+.video-modal video {max-width:75vw;max-height:60vh;border-radius:14px;background:#222;box-shadow:0 0 12px #00eaff;}
+.eagle-splash {
+  position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:30;
+  font-family:'Orbitron',sans-serif;
+  font-size:4.6vw;min-font-size:2.2em;max-font-size:4.5em;
+  font-weight:900; letter-spacing:0.2em; text-shadow:0 0 30px #fff200, 0 0 40px #ff00cc,0 0 12px #00eaff;
+  background:rgba(255,255,255,0.08);
+  animation: eagleSplashAnim 1s alternate infinite, eagleColors 5s linear infinite;
+}
+@keyframes eagleSplashAnim {0% {transform:scale(1);}100% {transform:scale(1.12);}}
+@keyframes eagleColors {
+  0%{color:#ff00cc;}
+  12%{color:#fff200;}
+  22%{color:#00eaff;}
+  32%{color:#ff00cc;}
+  45%{color:#fff;}
+  65%{color:#00eaff;}
+  85%{color:#ff00cc;}
+  100%{color:#fff200;}
+}
+.blinking {animation: blink 0.7s steps(1) infinite;}
+@keyframes blink {0%,100%{opacity:1;}50%{opacity:0.2;}}
+.video-controls-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0 0 0;flex-wrap:wrap;}
+.ctrl-label {font-weight:bold;color:#fff200;}
+.ctrl-select, .ctrl-btn {padding:6px 13px;border-radius:9px;border:1.5px solid #fff200;margin-left:7px;font-size:1.09em;}
+.ctrl-btn {background:linear-gradient(90deg,#fff200,#ff00cc);color:#222;font-weight:bold;cursor:pointer;}
+.ctrl-btn:hover {background:linear-gradient(90deg,#00eaff,#fff200);}
+@media (max-width:700px) {
+  .section-container{max-width:99vw;}
+  .video-modal video {max-width:97vw;}
+  .video-modal {padding:8px;}
+  .video-controls-bar{flex-direction:column;gap:8px;}
+  .login-container {width:90vw;}
+}
+</style>
+</head>
+<body>
+<!-- Login Page -->
+<div id="pageLogin" class="page active" style="background-image:url('https://i.ibb.co/8VPvpMg/Img2url-bot.jpg')">
+  <div class="centered">
+    <div class="login-container">
+      <div class="login-title">🔐 Eagle Yt World</div>
+      <input class="login-input" id="loginUser" placeholder="User ID" autocomplete="username">
+      <input class="login-input" id="loginPass" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="login-btn" onclick="login()">LOGIN</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+</div>
+<!-- Welcome Page -->
+<div id="page1" class="page" style="background-image:url('https://i.ibb.co/8VPvpMg/Img2url-bot.jpg');justify-content:center;">
+  <div>
+    <img src="https://i.ibb.co/0RVzmP0Q/Img2url-bot.jpg" alt="Logo" class="logo">
+    <div class="welcome-title">Welcome in Eagle Yt World</div>
+  </div>
+</div>
+<!-- Subscribe Page -->
+<div id="page2" class="page" style="background-image:url('https://i.ibb.co/Csz8ysvH/Img2url-bot.jpg');">
+  <button class="back-btn" onclick="goPage('page1')">⬅ BACK</button>
+  <button class="toggle-mode-btn" onclick="toggleNightMode()" id="modeBtn" title="Switch theme"><span id="modeIcon">🌙</span></button>
+  <div style="text-align:center;">
+    <img src="https://i.ibb.co/0RVzmP0Q/Img2url-bot.jpg" alt="Logo" class="logo" style="margin-bottom:0;">
+    <div class="main-title" style="margin-top:10px;">Join Our <span style="color:#ff00cc">Telegram Channel!</span></div>
+    <button class="neon-btn" onclick="window.open('https://t.me/+ID-UKGD3ke9iN2Mx','_blank')">JOIN NOW</button>
+    <button class="neon-btn" onclick="window.open('https://t.me/SHIZUKAxEAGLE_BOT','_blank')">CONTACT ADMIN</button>
+    <button class="neon-btn" onclick="goPage('page3')">GO TO SUBJECTS</button>
+  </div>
+</div>
+<!-- Subjects Page -->
+<div id="page3" class="page" style="background-image:url('https://i.ibb.co/SXG18fC2/Img2url-bot.jpg');align-items:flex-start;width:100vw;">
+  <button class="back-btn" onclick="goPage('page2')">⬅ BACK</button>
+  <button class="toggle-mode-btn" onclick="toggleNightMode()" id="modeBtn3" title="Switch theme" style="right:18px;top:18px;"><span id="modeIcon3">🌙</span></button>
+  <div class="section-container">
+    <div class="thumb-top"><img src="https://i.ibb.co/0vzvSTW/Img2url-bot.jpg" alt="Thumbnail"></div>
+    <div class="countdown" id="countdown"></div>
+    <div class="main-title">SUBJECTS</div>
+    <div class="folder-list" id="subjectFolders"></div>
+  </div>
+</div>
+<!-- Video Modal -->
+<div id="videoModalBg" class="video-modal-bg" onclick="closeVideo()">
+  <div class="video-modal" onclick="event.stopPropagation();">
+    <div style="position:relative;">
+      <div id="eagleSplash" class="eagle-splash blinking">EAGLE</div>
+      <video id="modalVideo" controls autoplay style="display:block;z-index:1;position:relative;" onplay="showSplash()" onended="closeVideo()">
+        <source id="modalVideoSrc" src="" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <div class="video-controls-bar">
+      <span>
+        <span class="ctrl-label">Speed:</span>
+        <select id="speedSel" class="ctrl-select" onchange="setVideoSpeed()">
+          <option>0.5x</option>
+          <option>1x</option>
+          <option>1.25x</option>
+          <option>1.5x</option>
+          <option>1.75x</option>
+          <option>2x</option>
+          <option>2.25x</option>
+          <option>2.5x</option>
+        </select>
+      </span>
+      <span>
+        <span class="ctrl-label">Quality:</span>
+        <select id="qualitySel" class="ctrl-select" onchange="setVideoQuality()">
+          <option>360P</option>
+          <option>480P</option>
+          <option selected>720P</option>
+        </select>
+      </span>
+      <button class="ctrl-btn" onclick="closeVideo()">Close Video</button>
+    </div>
+  </div>
+</div>
+<script>
+// -- Theme Mode --
+let night = false;
+function toggleNightMode() {
+  night = !night;
+  document.body.classList.toggle("night", night);
+  document.getElementById("modeIcon").textContent = night ? "☀️" : "🌙";
+  if(document.getElementById("modeIcon3")) document.getElementById("modeIcon3").textContent = night ? "☀️" : "🌙";
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById("modeIcon").textContent = night ? "☀️" : "🌙";
+  if(document.getElementById("modeIcon3")) document.getElementById("modeIcon3").textContent = night ? "☀️" : "🌙";
+});
+// -- Login --
+function login() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  if (user === "SHIZUKA" && pass === "EAGLE") {
+    showOnly('page1');
+    setTimeout(()=>showOnly('page2'),2000);
+  } else {
+    document.getElementById('loginError').textContent = "❗ Invalid User ID or Password";
+  }
+}
+// -- Navigation --
+function goPage(page) {
+  showOnly(page);
+  if(page==='page1') setTimeout(()=>showOnly('page2'),2000);
+}
+function showOnly(pageId) {
+  for(const el of document.querySelectorAll('.page')) el.classList.remove('active');
+  document.getElementById(pageId).classList.add('active');
+}
+// -- Countdown Timer --
+function updateCountdown() {
+  const target = new Date("2026-05-03T00:00:00");
+  const now = new Date();
+  let diff = target - now;
+  if(diff<0) diff = 0;
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff/(1000*60*60))%24);
+  const m = Math.floor((diff/(1000*60))%60);
+  const s = Math.floor((diff/1000)%60);
+  document.getElementById("countdown").innerHTML =
+    `Countdown to 3 May 2026: 
+      <span class="countdown-number">${d}</span>d 
+      <span class="countdown-number">${h}</span>h 
+      <span class="countdown-number">${m}</span>m 
+      <span class="countdown-number">${s}</span>s`;
+}
+setInterval(updateCountdown,1000);
+updateCountdown();
+// -- Data --
+const subjects = [
+  {name:"INTRO", videos: [
+    {
+      label: "Intro - NEET 2026 Online Batch | Biggest Announcement & Surprise | Must Watch [03-Jul-2025 20:40]",
+      qualities: { "720P": "https://stream.asmultiverse.com/dl/6888a64193a9c64e7b5575a0" }
+    },
+    {
+      label: "Intro - NEET 2026 All FAQs Related To Our Achiever Online Batch | Organic Chemistry Strategy | DN Sir [07-Jul-2025 11:21]",
+      qualities: { "720P": "https://www.youtube.com/embed/Ts56vKGy3uM" }
+    },
+    {
+      label: "Intro - LIVE Orientation Session | Everything You Need to Know Before You Begin [07-Jul-2025 17:00]",
+      qualities: { "720P": "https://www.youtube.com/embed/yz_DTcwGTuY" }
+    },
+    {
+      label: "Intro - Minor Test - 01 | Video Solution [28-Jul-2025 19:27]",
+      qualities: { "720P": "https://www.youtube.com/embed/aO_qGZpDMg8" }
+    }
+  ],
+  pdfs: [
+    {
+      label: "Intro - Minor Test - 01 | Answer Key SHIZUKAxEAGLE",
+      url: "https://educp.crwilladmin.com/uploads/class-attachment/lclsys_2__Hint_Sheet_Minor1_27072025.pdf"
+    },
+    {
+      label: "Intro - Minor Test - 01 | Question Paper SHIZUKAxEAGLE",
+      url: "https://educp.crwilladmin.com/uploads/class-attachment/lclsys_2__Online_Minor1_27072025.pdf"
+    },
+    {
+      label: "Intro - Minor Test - 01 | Syllabus & Exam Pattern SHIZUKAxEAGLE",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68845458028bb_Syllabbus.pdf"
+    },
+    {
+      label: "Intro - Time Table SHIZUKAxEAGLE",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6878ecd11f085_Premedical_Session_202526Online_MON_TO_SAT.pdf"
+    },
+    {
+      label: "Intro - Course Planner-1 SHIZUKAxEAGLE",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d4c1f583d7_Course_Planner_1.pdf"
+    },
+    {
+      label: "Intro - Test Planner SHIZUKAxEAGLE",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d4c5af07a5_Test_Planner_.pdf"
+    },
+    {
+      label: "Intro - Holiday List 2025-26 SHIZUKAxEAGLE",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d4cd11dd09_Holiday_list_.pdf"
+    }
+  ]
+},
+  {name:"MODULES", videos:[], pdfs: [
+  { label: "Biology Module-8 (Hindi) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d59b8ea972_BiologyM08HCW.pdf" },
+  {
+    label: "Biology Module-9 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d5943650dd_BiologyM09ECW.pdf"
+  },
+  {
+    label: "Biology Module-8 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d590a726c3_BiologyM08ECW.pdf"
+  },
+  {
+    label: "Biology Module-7 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d58cf2f1f9_BiologyM07ECW.pdf"
+  },
+  {
+    label: "Biology Module-6 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d5839b91e6_BiologyM06E_CW.pdf"
+  },
+  {
+    label: "Biology Module-5 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d5810888f1_BiologyM05E_CW.pdf"
+  },
+  {
+    label: "Biology Module-3 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d57dfe467e_BiologyM03_E_CW.pdf"
+  },
+  {
+    label: "Chemistry Module -4 (Hindi) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d572e632ef_ChemistryM04H_CW.pdf"
+  },
+  {
+    label: "Chemistry Module -2 (Hindi) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d56fe74e13_ChemistryM02H_CW.pdf"
+  },
+  {
+    label: "Chemistry Module -5 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d56bf83b2f_ChemistryM05E_CW.pdf"
+  },
+  {
+    label: "Chemistry Module -4 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d5698e9c18_ChemistryM04E_CW.pdf"
+  },
+  {
+    label: "Chemistry Module -3 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d55d68d9c9_ChemistryM03E_CWcompressed.pdf"
+  },
+  {
+    label: "Chemistry Module -2 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d5527ba501_ChemistryM02E_CW.pdf"
+  },
+  {
+    label: "Chemistry Module -1 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d54af6e359_ChemistryM01E_CW.pdf"
+  },
+  {
+    label: "Physics Module -5 (Hindi) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d544adcc67_PhysicsM05ECW.pdf"
+  },
+  {
+    label: "Physics Module -4 (Hindi) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d54060633e_PhysicsM04ECW.pdf"
+  },
+  {
+    label: "Physics Module -3 (Hindi) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d52ab45e19_PhysicsM03ECW.pdf"
+  },
+  {
+    label: "Physics Module -1 (Hindi) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d52641dd7c_PhysicsM01HCW.pdf"
+  },
+  {
+    label: "Physics Module - 4 | Extra Solution (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6877ff0484fef_Module4_Extra_Solutions_1.pdf"
+  },
+  {
+    label: "Physics Module 4 to 6 Solution (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68768a93d3b1b_12thPhysicsM04_to_06_Solutioncompressed.pdf"
+  },
+  {
+    label: "Physics Module 1 to 3 Solution (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68768ad5b428b_11thPhysicsSolutionsM1_to_3_CW_1compressed.pdf"
+  },
+  {
+    label: "Physics Module -6 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d51e172001_PhysicsM06ECW.pdf"
+  },
+  {
+    label: "Physics Module -5 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d51a58c0bc_PhysicsM05ECW.pdf"
+  },
+  {
+    label: "Physics Module -4 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd-attachment/686d50962e4e9_PhysicsM04ECW.pdf"
+  },
+  {
+    label: "Physics Module -3 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0aysicsM03ECW.pdf"
+  },
+  {
+    label: "Physics Module -2 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d50096baff_PhysicsM02ECWcompressed_1.pdf"  },
+  {
+    label: "Physics Module -1 (English) EAGLE",
+    url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d4ebcc66aa_PhysicsM01ECW.pdf"
+  }
+]},
+  {name:"PHYICS XI [[PMP SIR]]", videos:[
+    {
+      label: "Basic Maths | L-01 | Trigonometry [08-Jul-2025 17:00]",
+      qualities: { "720P": "https://www.youtube.com/embed/T8o7YwzPhls" }
+    },
+    {
+      label: "Basic Maths | L-02 | Calculus Differentiation [10-Jul-2025 17:00]",
+      qualities: { "720P": "https://www.youtube.com/embed/y0lG2RJ5xsM" }
+    },
+    {
+      label: "Basic Maths | L-03 | Calculus Differentiation [12-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4480756/175232602911858959035/175232602911858959035_8959035.m3u8" }
+    },
+    {
+      label: "Basic Maths | Topic Wise Exercise Solution | 01-17 [14-Jul-2025 19:44]",
+      qualities: { "720P": "https://www.youtube.com/embed/8Rd3fSPFpSs" }
+    },
+    {
+      label: "Basic Maths | L-04 | Integration [15-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4482898/175258492052111976266/175258492052111976266_1976266.m3u8" }
+    },
+    {
+      label: "Basic Maths | L-05 | Coordinate Geometry, Graphs And Algebra [17-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4484982/175275757036171976266/175275757036171976266_1976266.m3u8" }
+    },
+    {
+      label: "Vector | L-01 | Defination & Type Of Vector [19-Jul-2025 17:00]",
+      qualities: { "720P": "https://stream.asmultiverse.com/dl/6888a3e493a9c64e7b557588" }
+    },
+    {
+      label: "Vector | L-02 | Vector Addition And Subtraction [22-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4489720/175318956274626723772/175318956274626723772_6723772.m3u8" }
+    },
+    {
+      label: "Vector | L-03 | Multiplication Two Vectors Scaler Product (Dot Product) [24-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4492776/175336232490226723772/175336232490226723772_6723772.m3u8" }
+    },
+    {
+      label: "Vector (Cross Product) & NLM | L-01 | Inertia [26-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4495232/175353512198425908244/175353512198425908244_5908244.m3u8" }
+    }
+  ], pdfs:[
+    { label: "Vector (Cross Product) & NLM | L-01 (Class Notes) | Inertia",
+      url: "https://educp.crwilladmin.com/uploads/class-attachment/lclsys_NLM_L01_compressed.pdf" },
+    { label: "Vector | L-03 (Class Notes) | Multiplication Two Vectors Scaler Product (Dot Product)",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/688451ea654eb_L03_Vector.pdf" },
+    { label: "Vector | L-02 (Class Notes) | Vector Addition And Subtraction",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687f9094e7a53_L02_Vector.pdf" },
+    { label: "Vector | L-01 (Class Notes) | Defination & Type Of Vector",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687b9bdbb0635_L01_Vector.pdf" },
+    { label: "Basic math | Topic Wise Exercise Solution | 18-32",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687a4f2e5321e_Basic_Maths_Topicvise_Excersise_solutionremoved_2.pdf" },
+    { label: "Basic math | Topic Wise Exercise Solution | 01-17",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687a4d7a07157_Basic_Maths_Topicvise_Excersise_solutionremoved.pdf" },
+    { label: "Basic Math | L-05 (Class Notes) | Coordinate Geometry, Graphs And Algebra",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6878f8e98afe0_lec_05_PMP_sir.pdf" },
+    { label: "Basic Maths | L-04 (Class Notes) | Integration",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687655afa83f3_lec_04_PMP_sir.pdf" },
+    { label: "Basic Maths | L-03 (Class Notes) | Calculus Differentiation",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6872663e33f62_lec_03_PMP_sir.pdf" },
+    { label: "Basic Maths | L-02 (Class Notes) | Calculus Differentiation",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686fbd08e8463_lec_02.pdf" },
+    { label: "Basic Maths | L-01 (Class Notes) | Trigonometry",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d497e1a4eb_Basics_maths_Trigonometry_Lec1compressed_1.pdf" }
+  ]},
+  {
+  name: "PHYSICS XII [[DJ SIR]]",
+  videos: [
+    {
+      label: "Electrostatics | L-01 | Charge & Properties Of Charge [09-Jul-2025 15:15]",
+      qualities: { "720P": "https://www.youtube.com/embed/22vs6eydjZo" }
+    },
+    {
+      label: "Electrostatics | L-02 | Methods Of Charging [11-Jul-2025 15:15]",
+      qualities: { "720P": "https://www.youtube.com/embed/H5NeKVGOWXk" }
+    },
+    {
+      label: "Electrostatics | L-03 | Induction, Coulomb's Law [14-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4481716/175249218234851976266/175249218234851976266_1976266.m3u8" }
+    },
+    {
+      label: "Electrostatics | L-04 | Coulomb's Law & Superposition [16-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4483818/175266498852614221427/175266498852614221427_4221427.m3u8" }
+    },
+    {
+      label: "Electrostatics | L-05 | Electric Field Intensity [18-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4485791/175283798259949803317/175283798259949803317_9803317.m3u8" }
+    },
+    {
+      label: "Electrostatics | L-06 | Electric Field And Electric Force [21-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4487800/175309724637741976266/175309724637741976266_1976266.m3u8" }
+    },
+    {
+      label: "Electrostatics | L-07 | Electric Field Lines And Electric Flux [23-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4491176/175326998245293259814/175326998245293259814_3259814.m3u8" }
+    },
+    {
+      label: "Electrostatics | L-08 | Gauss Theorem And Application [25-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4493658/175344267633164221427/175344267633164221427_4221427.m3u8" }
+    }
+  ],
+  pdfs: [
+    {
+      label: "Electrostatics | L-08 (Class Notes) | Gauss Theorem And Application RAJHARSH",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/688452ffc5157_lec_08_Electrostatics_DJ_sir.pdf"
+    },
+    {
+      label: "Electrostatics | L-07 (Class Notes) | Electric Field Lines And Electric Flux RAJHARSH",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68844fc771374_lec_07_Electrostatics_DJ_sir.pdf"
+    },
+    {
+      label: "Electrostatics | L-06 (Class Notes) | Electric Field And Electric Force RAJHARSH",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687e25a436fab_lec_06_Electrostatics_DJ_sir.pdf"
+    },
+    {
+      label: "Electrostatics | L-05 (Class Notes) | Electric Field Intensity RAJHARSH",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687a30f3dc567_lec_05_DJ_sir.pdf"
+    },
+    {
+      label: "Electrostatics | L-04 (Class Notes) | Coulomb's Law & Superposition RAJHARSH",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68778c5379623_lec_04_DJ_sir.pdf"
+    },
+    {
+      label: "Electrostatics | L-03 (Class Notes) | Induction, Coulomb's Law RAJHARSH",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6874ea994188c_lec_03_DJ_sir.pdf"
+    },
+    {
+      label: "Electrostatics | L-02 (Class Notes) | Methods Of Charging RAJHARSH",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6870f4c8e2311_lec_02.pdf"
+    },
+    {
+      label: "Electrostatics | L-01 (Class Notes) | Charge & Properties Of Charge RAJHARSH",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686e8afb9f3fe_Eletrostatics_Charge_and_Properties_of_Charge.pdf"
+    }
+  ]
+},
+{
+  name: "ORGANIC CHEMISTRY [[DN SIR]]",
+  videos: [
+    {
+      label: "IUPAC Nomenclature | L-01 | Hybridization, Sigma & Pi Bond Calculation [08-Jul-2025 18:45]",
+      qualities: { "720P": "https://www.youtube.com/embed/NXn02YYkqjY" }
+    },
+    {
+      label: "IUPAC Nomenclature | L-02 | Funtional Group Identification [10-Jul-2025 18:45]",
+      qualities: { "720P": "https://www.youtube.com/embed/GDR95ASeAHs" }
+    },
+    {
+      label: "IUPAC Nomenclature | L-03 | Naming & Selection [12-Jul-2025 18:45]",
+      qualities: { "720P": "https://www.youtube.com/embed/opDQhT9m5YI" }
+    },
+    {
+      label: "IUPAC Nomenclature | L-04 | IUPAC Naming Of Hydrocarbon [15-Jul-2025 18:45]",
+      qualities: { "720P": "https://stream.asmultiverse.com/dl/6888a43a93a9c64e7b55758a" }
+    },
+    {
+      label: "IUPAC Nomenclature | L-05 | Alcohol, Amine, ketone, Acid Naming [17-Jul-2025 18:45]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4485123/175276407316037371692/175276407316037371692_7371692.m3u8" }
+    },
+    {
+      label: "IUPAC Nomenclature | L-06 | Cyanide, Easter, Aldehyde, Anhydride, Amide, Acid Halide IUPAC Naming [19-Jul-2025 18:45]",
+      qualities: { "720P": "https://stream.asmultiverse.com/dl/6888a43a93a9c64e7b55758b" }
+    },
+    {
+      label: "IUPAC Nomenclature | L-07 | IUPAC Naming Of Cyclic Compound [22-Jul-2025 18:45]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4489821/175319568839387371692/175319568839387371692_7371692.m3u8" }
+    },
+    {
+      label: "IUPAC Nomenclature | L-08 I Common Name & IUPAC Naming Of Atomic Compound [24-Jul-2025 18:45]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4492863/175336837452764842669/175336837452764842669_4842669.m3u8" }
+    },
+    {
+      label: "IUPAC Nomenclature | L-09 | Module/Doubt Discussion [26-Jul-2025 18:45]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4495277/175353943363284221427/175353943363284221427_4221427.m3u8" }
+    }
+  ],
+  pdfs: [
+    {
+      label: "IUPAC Nomenclature | L-09 (Class Notes) | Module/Doubt Discussion EAGLE YT",
+      url: "https://educp.crwilladmin.com/uploads/class-attachment/lclsys_lec_09_IUPAC_NOMENCLATUR_DN_sir.pdf"
+    },
+    {
+      label: "IUPAC Nomenclature Quiz - 01 EAGLE YT",
+      url: "https://educp.crwilladmin.com/uploads/class-attachment/lclsys_Race_0104.pdf"
+    },
+    {
+      label: "IUPAC Nomenclature | L-08 | (Class Notes) | Common Name & IUPAC Naming of Atomic Compound EAGLE YT",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6884528324878_lec_08_IUPAC_NOMENCLATUR_DN_sir.pdf"
+    },
+    {
+      label: "IUPAC Nomenclature | L-07 (Class Notes) | IUPAC Naming Of Cyclic Compound EAGLE YT",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687fa58c34139_lec_07_IUPAC_NOMENCLATUR_DN_sir.pdf"
+    },
+    {
+      label: "IUPAC Nomenclature | L-06 (Class Notes)  | Cyanide, Easter, Aldehyde, Anhydride, Amide, Acid Halide IUPAC Naming EAGLE YT",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687bb1d903ff1_lec_06_IUPAC_NOMENCLATUR_DN_sir.pdf"
+    },
+    {
+      label: "IUPAC Nomenclature | L-05 (Class Notes)  | Alcohol, Amine, ketone, Acid Naming EAGLE YT",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68790f9549c50_lec_05_DN_sir.pdf"
+    },
+    {
+      label: "IUPAC Nomenclature | L-04 (Class Notes) | IUPAC Naming Of Hydrocarbon EAGLE YT",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68766b232aad2_lec_04_DN_sir.pdf"
+    },
+    {
+      label: "IUPAC Nomenclature | L-03 (Class Notes) | Naming & Selection EAGLE YT",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687515cede564_IUPAC_Nomenclature_L03_Naming_Selection.pdf"
+    },
+    {
+      label: "IUPAC Nomenclature | L-02 (Class Notes) | Funtional Group Identification EAGLE YT",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686fd40eecfba_lec_02.pdf"
+    },
+    {
+      label: "IUPAC Nomenclature | L-01 (Class Notes) | Hybridization, Sigma & Pi Bond Calculation EAGLE YT",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d4a015ecc5_IUPAC_NOMENCLATURE_Hybridization_sigma_and_pi_bonds_calculation_Lec1.pdf"
+    }
+  ]
+},
+  {name:"INORGANIC CHEMISTRY [[AS SIR]]", 
+  videos: [
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-01 | Periodic Table [09-Jul-2025 17:00]",
+      qualities: { "720P": "https://www.youtube.com/embed/8OLmvJXNAHU" }
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-02 | Electronic Configuration & Bohrs Classification [11-Jul-2025 17:00]",
+      qualities: { "720P": "https://www.youtube.com/embed/MjpKhun7_Bs" }
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-03 | Bohr Classification & Identification Of Period,Block & Group [16-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4483935/17526711108337622509/17526711108337622509_622509.m3u8" }
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-04 | Identification Of Period, Group And Block [18-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4485953/175284400397781976266/175284400397781976266_1976266.m3u8" }
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-05 | Zeff And Screening Effect [21-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4487962/175310314021881561360/175310314021881561360_1561360.m3u8" }
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-06 | Periodic Table | Zeff And S.E. And Atomic Radius [23-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4491481/175327584213566723772/175327584213566723772_6723772.m3u8" }
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-07 | Ionic Radius [25-Jul-2025 17:00]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4493860/17534487166228622509/17534487166228622509_622509.m3u8" }
+    }
+  ],
+  pdfs: [
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-07 (Class Notes) | Ionic Radius SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6884535a98cdf_lec07_Periodic_table_AS_sir.pdf"
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-06 (Class Notes) | Zeff And S.E. And Atomic Radius SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68845039f3a40_lec06_Periodic_table_AS_sir.pdf"
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-05 (Class Notes) | Zeff And Screening Effect SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687e3eac28c44_lec05_Periodic_table_AS_sir.pdf"
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-04 (Class Notes) | Identification Of Period, Group And Block SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687a4ab9ba96c_lec04_AS_sir.pdf"
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-03 (Class Notes) | Bohr Classification & Identification Of Period, Block & Group SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6877a4c45c6b6_lec03_AS_sir.pdf"
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-02 (Class Notes) | Electronic Configuration & Bohr's Classification SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68779b5ce9706_lec02_AS_sir.pdf"
+    },
+    {
+      label: "Inorganic Chemistry - Periodic Table | L-01 (Class Notes) | Periodic Table SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686e8b742f03b_Periodic_table_Periodic_table_Lec01.pdf"
+    }
+  ]
+}
+  ,
+  {name:"ZOOLOGY [[MJ STAR]]", 
+  videos: [
+    {
+      label: "Zoology - Human Neural System | L-01 | Neural Control & Coordination [08-Jul-2025 15:15]",
+      qualities: { "720P": "https://www.youtube.com/embed/WxCnwyF-dgg" }
+    },
+    {
+      label: "Zoology - Human Neural System | L-02 | Myelinogenesis Generation & Conducting Of Nerve Impulse [10-Jul-2025 15:15]",
+      qualities: { "720P": "https://www.youtube.com/embed/u4V_Cpj0SQg" }
+    },
+    {
+      label: "Zoology - Human Neural System | L-03 | Conduction And Transmission Of Nerve Impuse, CNS(Brain) [12-Jul-2025 15:15]",
+      qualities: { "720P": "https://www.youtube.com/embed/7lD21nCC2PE" }
+    },
+    {
+      label: "Zoology - Human Neural System | L-04 | Brain [15-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4482738/175257854888529803317/175257854888529803317_9803317.m3u8" }
+    },
+    {
+      label: "Zoology - Human Neural System | L-05 | Principle Neural System Endocine System(Introduction) [17-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4484763/175275119068379803317/175275119068379803317_9803317.m3u8" }
+    },
+    {
+      label: "Zoology - Chemical Coordination And Integration | L-01 | Pituitary Gland [19-Jul-2025 15:15]",
+      qualities: { "720P": "https://stream.asmultiverse.com/dl/6888a49593a9c64e7b55758d" }
+    },
+    {
+      label: "Zoology - Chemical Coordination And Integration | L-02 | Thyroid And Parathyroid Gland [22-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4489518/175318302586153259814/175318302586153259814_3259814.m3u8" }
+    },
+    {
+      label: "Zoology - Chemical Coordination And Integration | L-03 | Adrenal Gland, Thymus Gland, Pineal Gland [24-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4492642/175335617489583259814/175335617489583259814_3259814.m3u8" }
+    },
+    {
+      label: "Zoology - Chemical Coordination And Integration | L-04 | Pancreas, Gonads, Liver, Kidney, Heart, Module/Doubt Discussion [26-Jul-2025 15:15]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4494852/175352871142843259814/175352871142843259814_3259814.m3u8" }
+    }
+  ],
+  pdfs: [
+    {
+      label: "Zoology - Chemical Coordination And Integration | L-04 (Class Notes) | Pancreas, Gonads, Liver, Kidney, Heart, Module/Doubt Discussion SHIZUKA",
+      url: "https://educp.crwilladmin.com/uploads/class-attachment/lclsys_L04_chemical_coordination_and_integration.pdf"
+    },
+    {
+      label: "Zoology - Chemical Coordination And Integration | L-03 (Class Notes) | Adrenal Gland, Thymus Gland, Pineal Gland SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68845126ef44e_L03_chemical_coordination_and_integration.pdf"
+    },
+    {
+      label: "Zoology - Chemical Coordination And Integration | L-02 (Class Notes) | Thyroid And Parathyroid Gland SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687f742a8ebb7_L02_chemical_coordination_and_integration.pdf"
+    },
+    {
+      label: "Zoology - Chemical Coordination And Integration | L-01 (Class Notes) | Pituitary Gland SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687b83ae6a6e4_lec_01.pdf"
+    },
+    {
+      label: "Zoology - Human Neural System | L-05 (Class Notes) | Principle Neural System Endocine System(Introduction) SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6878e02fbba9b_lec_05_MJ_sir.pdf"
+    },
+    {
+      label: "Zoology - Human Neural System | L-04 (Class Notes) | Brain SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68763d548b6aa_lec_04_MJ_sir.pdf"
+    },
+    {
+      label: "Zoology - Human Neural System | L-03 (Class Notes) | Conduction And Transmission Of Nerve Impulse, CNS(Brain) SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68724a08e6ba3_lec_03.pdf"
+    },
+    {
+      label: "Zoology - Human Neural System | L-02 (Class Notes) | Myelinogenesis Generation & Conducting Of Nerve Impulse SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686fb3682543b_L02_Human_neural_system_myelinogenesis_generation_conduction_nerveinpluse_lecture02_MJ_SIR.pdf"
+    },
+    {
+      label: "Zoology - Human Neural System | L-01 (Class Notes) | Neural Control & Coordination SHIZUKA",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686d4a5c064eb_Human_neural_system_Neural_control_and_cordination_lecture1_MJ_SIR.pdf"
+    }
+  ]
+},
+  {name:"BOTANY [[MKG SIR]]", 
+  videos: [
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-01 | Introduction [09-Jul-2025 18:45]",
+      qualities: { "720P": "https://www.youtube.com/embed/mTGQMHXfKUY" }
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-02 | DNA [11-Jul-2025 18:45]",
+      qualities: { "720P": "https://www.youtube.com/embed/X4HxPwilPyA" }
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-03 | Double Helix Model Of DNA & Packaging Of DNA Helix [14-Jul-2025 18:45]",
+      qualities: { "720P": "https://www.youtube.com/embed/fMkKOD1pNZ8" }
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-04 | The Search For Genetic Material [16-Jul-2025 18:45]",
+      qualities: { "720P": "https://www.youtube.com/embed/ayaWhHdfnzM" }
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-05 | Properties Of Genetic Material,  DNA Replication [18-Jul-2025 18:45]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4486061/175285046892471190274/175285046892471190274_1190274.m3u8" }
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-06 | DNA Replication [21-Jul-2025 18:45]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4488093/175311021248856723772/175311021248856723772_6723772.m3u8" }
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-07 | RNA [23-Jul-2025 18:45]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4491641/175328288582507371692/175328288582507371692_7371692.m3u8" }
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-08 | Transcription [25-Jul-2025 18:45]",
+      qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/channel_vod_non_drm_hls/4493973/175345538663804842669/175345538663804842669_4842669.m3u8" }
+    }
+  ],
+  pdfs: [
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-08 | (Class Notes) | Transcription SHIZUKA ",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6884539943cf3_lec_08_molecular_basis_MKG_sir.pdf"
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-07 (Class Notes) | RNA SHIZUKA ",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68845080346ea_lec_07_molecular_basis_MKG_sir.pdf"
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-06 (Class Notes) | DNA Replication SHIZUKA ",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687e5774045a5_lec_06_molecular_basis_MKG_sir.pdf"
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-05 (Class Notes) | Properties Of Genetic Material,  DNA Replication SHIZUKA ",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687a610136064_lec_05_MKG_sir.pdf"
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-04 (Class Notes) | The Search For Genetic Material SHIZUKA ",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/6877be7c15c7c_lec_04_MKG_sir.pdf"
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-03 (Class Notes) | Double Helix Model Of DNA & Packaging Of DNA Helix SHIZUKA ",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/68751a6bdc859_lec_03_MKG_sir.pdf"
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-02 (Class Notes) | DNA SHIZUKA ",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/687125e5c232c_lec_02_MKG_sir.pdf"
+    },
+    {
+      label: "Botany - Molecular Basis Of Inheritance | L-01 (Class Notes) | Introduction SHIZUKA ",
+      url: "https://cwmediabkt99.crwilladmin.com/92013a99927c4842b0a70fbd6f064a95:crwilladmin/class-attachment/686e8dcfa9bb9_molecular_basis_Basic_of_inheritance_Lec01.pdf"
+    }
+  ]
+},
+  {
+  name: "MAZA 1",
+  videos: [
+    { label: "Organic Chem | L-01 | IUPAC [15-Jul-2025 14:29]", qualities: { "720P": "https://stream.asmultiverse.com/dl/6888a50393a9c64e7b557592" } 
+},
+    { label: "Organic Chem | L-02 | IUPAC [15-Jul-2025 14:36]", qualities: { "720P": "https://stream.asmultiverse.com/dl/6888a50393a9c64e7b557591" } },
+    { label: "Organic Chem | L-03 | IUPAC [15-Jul-2025 14:46]", qualities: { "720P": "https://d14v4v80cpjht7.cloudfront.net/file_library/videos/vod_non_drm_ios/4482588/1752570726_5203274390043697/1752570622362_85459770146594110_video_VOD.m3u8" } },
+    { label: "Organic Chem | L-04 | IUPAC [16-Jul-2025 13:33]", qualities: { "720P": "https://www.youtube.com/embed/uK85y_u39dg" } },
+    { label: "Organic Chem | L-05 | IUPAC [16-Jul-2025 13:37]", qualities: { "720P": "https://www.youtube.com/embed/pSPjzZq4-88" } },
+    { label: "Organic Chem | L-06 | IUPAC [16-Jul-2025 13:39]", qualities: { "720P": "https://www.youtube.com/embed/4V_C6Zi75X0" } },
+    { label: "Organic Chem | L-07 | IUPAC [16-Jul-2025 13:42]", qualities: { "720P": "https://www.youtube.com/embed/eRFR4XeJ_5U" } },
+    { label: "Organic Chem | L-08 | IUPAC [16-Jul-2025 13:44]", qualities: { "720P": "https://www.youtube.com/embed/NvH8_yo6m3U" } },
+    { label: "Organic Chem | L-01 | Isomerism [16-Jul-2025 14:28]", qualities: { "720P": "https://www.youtube.com/embed/Ct6bJyRBaII" } },
+    { label: "Organic Chem | L-02 | Isomerism [16-Jul-2025 14:28]", qualities: { "720P": "https://www.youtube.com/embed/XFHgzCE359s" } },
+    { label: "Organic Chem | L-03 | Isomerism [16-Jul-2025 14:37]", qualities: { "720P": "https://www.youtube.com/embed/YybrNsi2UZI" } },
+    { label: "Organic Chem | L-04 | Isomerism [16-Jul-2025 14:38]", qualities: { "720P": "https://www.youtube.com/embed/M8JRwfCKp7o" } },
+    { label: "Organic Chem | L-05 | Isomerism [16-Jul-2025 14:40]", qualities: { "720P": "https://www.youtube.com/embed/IsA-zgidu84" } },
+    { label: "Organic Chem | L-06 | Isomerism [16-Jul-2025 14:42]", qualities: { "720P": "https://www.youtube.com/embed/xzRtoSGW-NA" } },
+    { label: "Organic Chem | L-07 | Isomerism [16-Jul-2025 14:43]", qualities: { "720P": "https://www.youtube.com/embed/G2W9_HU_0F8" } },
+    { label: "Organic Chem | L-08 | Isomerism [16-Jul-2025 14:44]", qualities: { "720P": "https://www.youtube.com/embed/uUOWANHtH2I" } },
+    { label: "Organic Chem | L-09 | Isomerism [16-Jul-2025 14:45]", qualities: { "720P": "https://www.youtube.com/embed/NWakZbcB4rw" } },
+    { label: "Organic Chem | L-10 | Isomerism [16-Jul-2025 14:46]", qualities: { "720P": "https://www.youtube.com/embed/BaOeZ7viJqQ" } },
+    { label: "Organic Chem | L-11 | Isomerism [16-Jul-2025 14:47]", qualities: { "720P": "https://www.youtube.com/embed/jylCbHLWCVs" } },
+    { label: "Organic Chem | L-12 | Isomerism [16-Jul-2025 14:48]", qualities: { "720P": "https://www.youtube.com/embed/EdYUvhE28bA" } },
+    { label: "Zoology | L-01 | Body Fluids And Circulation [16-Jul-2025 15:13]", qualities: { "720P": "https://www.youtube.com/embed/LaKdLiN0JrI" } },
+    { label: "Zoology | L-02 | Body Fluids And Circulation [16-Jul-2025 15:26]", qualities: { "720P": "https://www.youtube.com/embed/qShUMwV3aPM" } },
+    { label: "Zoology | L-03 | Body Fluids And Circulation [16-Jul-2025 15:29]", qualities: { "720P": "https://www.youtube.com/embed/yGQdhJtHB2I" } },
+    { label: "Zoology | L-04 | Body Fluids And Circulation [16-Jul-2025 15:33]", qualities: { "720P": "https://www.youtube.com/embed/5jl7Yo_Ck98" } },
+    { label: "Zoology | L-05 | Body Fluids And Circulation [16-Jul-2025 15:42]", qualities: { "720P": "https://www.youtube.com/embed/uNujQICUHyk" } },
+    { label: "Zoology | L-06 | Body Fluids And Circulation [16-Jul-2025 15:47]", qualities: { "720P": "https://www.youtube.com/embed/NvdOsk-ejs0" } },
+    { label: "Zoology| L-01 | Neural Control And Coordination [17-Jul-2025 07:44]", qualities: { "720P": "https://www.youtube.com/embed/AmRyZ54npqo" } },
+    { label: "Zoology| L-02 | Neural Control And Coordination [17-Jul-2025 07:46]", qualities: { "720P": "https://www.youtube.com/embed/SBY9l2eeDcg" } },
+    { label: "Zoology| L-03 | Neural Control And Coordination [17-Jul-2025 07:47]", qualities: { "720P": "https://www.youtube.com/embed/m8WrtfBgV6w" } },
+    { label: "Zoology| L-04 | Neural Control And Coordination [17-Jul-2025 07:48]", qualities: { "720P": "https://www.youtube.com/embed/Ax4XKp1JNNk" } },
+    { label: "Zoology| L-05 | Neural Control And Coordination [17-Jul-2025 07:49]", qualities: { "720P": "https://www.youtube.com/embed/p1MMB9q2uSc" } },
+    { label: "Zoology | L-01 | Chemical Coordination And Integration [17-Jul-2025 07:50]", qualities: { "720P": "https://www.youtube.com/embed/nB2jCERm2_g" } },
+    { label: "Zoology | L-02 | Chemical Coordination And Integration [17-Jul-2025 07:51]", qualities: { "720P": "https://www.youtube.com/embed/mll0HIVFse4" } },
+    { label: "Zoology | L-03 | Chemical Coordination And Integration [17-Jul-2025 07:57]", qualities: { "720P": "https://www.youtube.com/embed/smqeaDKCCSM" } },
+    { label: "Zoology | L-04 | Chemical Coordination And Integration [17-Jul-2025 07:58]", qualities: { "720P": "https://www.youtube.com/embed/mB_OovSxWfo" } },
+    { label: "Zoology | L-05 | Chemical Coordination And Integration [17-Jul-2025 07:59]", qualities: { "720P": "https://www.youtube.com/embed/dSLq-M6ykEQ" } },
+    { label: "Zoology | L-01 | Evolution [17-Jul-2025 08:01]", qualities: { "720P": "https://www.youtube.com/embed/6d-YC-CVNBE" } },
+    { label: "Zoology | L-02 | Evolution [17-Jul-2025 08:02]", qualities: { "720P": "https://www.youtube.com/embed/QAi2bj2gJA8" } },
+    { label: "Physics | L-01 | Basic Maths and Vector [17-Jul-2025 08:19]", qualities: { "720P": "https://www.youtube.com/embed/ZZlZek1Hoik" } },
+    { label: "Physics | L-02 | Basic Maths and Vector [17-Jul-2025 08:38]", qualities: { "720P": "https://www.youtube.com/embed/UOrw1NOrfyI" } },
+    { label: "Physics | L-3 | Basic Maths and Vector [17-Jul-2025 08:40]", qualities: { "720P": "https://www.youtube.com/embed/bJF-lTWLpxc" } },
+    { label: "Physics | L-04 | Basic Maths and Vector [17-Jul-2025 08:41]", qualities: { "720P": "https://www.youtube.com/embed/8iZ7Z_q-MDw" } },
+    { label: "Physics | L-05 | Basic Maths and Vector [17-Jul-2025 08:42]", qualities: { "720P": "https://www.youtube.com/embed/XNBAScpdqEQ" } },
+    { label: "Physics | L-06  | Basic Maths and Vector [17-Jul-2025 08:43]", qualities: { "720P": "https://www.youtube.com/embed/MznLY3PZ8NQ" } },
+    { label: "Physics | L-07 | Basic Maths and Vector [17-Jul-2025 08:45]", qualities: { "720P": "https://www.youtube.com/embed/LCMIhQ39eAM" } },
+    { label: "Physics | L-08 | Basic Maths and Vector [17-Jul-2025 08:46]", qualities: { "720P": "https://www.youtube.com/embed/1YokEGMyD-8" } },
+    { label: "Physics | L-09 | Basic Maths and Vector [17-Jul-2025 08:47]", qualities: { "720P": "https://www.youtube.com/embed/7xNVEWpNCXQ" } },
+    { label: "Physics | L-10 | Basic Maths and Vector [17-Jul-2025 08:48]", qualities: { "720P": "https://www.youtube.com/embed/XYn1aQRb1iU" } },
+    { label: "Physics | L-01 | Newton's Laws Of Motion [17-Jul-2025 08:50]", qualities: { "720P": "https://www.youtube.com/embed/rRjXieSWEqo" } },
+    { label: "Physics | L-02 | Newton's Laws Of Motion [17-Jul-2025 08:51]", qualities: { "720P": "https://www.youtube.com/embed/J271Pr440ng" } },
+    { label: "Physics | L-04 | Newton's Laws Of Motion [17-Jul-2025 08:52]", qualities: { "720P": "https://www.youtube.com/embed/Sc0ieWlYYq4" } },
+    { label: "Physics | L-03 | Newton's Laws Of Motion [17-Jul-2025 08:52]", qualities: { "720P": "https://www.youtube.com/embed/8XdRb4_j5dc" } },
+    { label: "Physics | L-05 | Newton's Laws Of Motion [17-Jul-2025 08:53]", qualities: { "720P": "https://www.youtube.com/embed/qa-UruxscyE" } },
+    { label: "Physics | L-06 | Newton's Laws Of Motion [17-Jul-2025 08:54]", qualities: { "720P": "https://www.youtube.com/embed/bnUvReUojYQ" } },
+    { label: "Physics | L-07 | Newton's Laws Of Motion [17-Jul-2025 08:56]", qualities: { "720P": "https://www.youtube.com/embed/hGaVEusydXU" } },
+    { label: "Physics | L-08 | Newton's Laws Of Motion [17-Jul-2025 08:57]", qualities: { "720P": "https://www.youtube.com/embed/9I8g1WN1VFs" } },
+    { label: "Physics | L-09 | Newton's Laws Of Motion [17-Jul-2025 08:59]", qualities: { "720P": "https://www.youtube.com/embed/vutZK1d9dc8" } },
+    { label: "Physics | L-10 | Newton's Laws Of Motion [17-Jul-2025 09:00]", qualities: { "720P": "https://www.youtube.com/embed/Gyq7fYB9g_8" } }
+  ],
+  pdfs: []
+},
+  {
+  name: "MAZA 2",
+  videos: [
+    { label: "Organic Chem | L-05 | Isomerism [17-Jul-2025 10:46]", qualities: { "720P": "https://www.youtube.com/embed/zxZayuHGG18" } },
+    { label: "Organic Chem | L-06 | Isomerism [17-Jul-2025 11:10]", qualities: { "720P": "https://www.youtube.com/embed/i6Ol4tykScQ" } },
+    { label: "Organic Chem | L-07 | Isomerism [17-Jul-2025 11:11]", qualities: { "720P": "https://www.youtube.com/embed/0_uYMrfEDrs" } },
+    { label: "Organic Chem | L-08 | Isomerism [17-Jul-2025 11:12]", qualities: { "720P": "https://www.youtube.com/embed/m_hYmATTUg8" } },
+    { label: "Organic Chem | L-09 | Isomerism [17-Jul-2025 11:13]", qualities: { "720P": "https://www.youtube.com/embed/iNLcM5Mrvyc" } },
+    { label: "Organic Chem | L-10 | Isomerism [17-Jul-2025 11:14]", qualities: { "720P": "https://www.youtube.com/embed/Y21vNseZVtU" } },
+    { label: "Organic Chem | L-11 | Isomerism [17-Jul-2025 11:15]", qualities: { "720P": "https://www.youtube.com/embed/QqfY6NGIAIU" } },
+    { label: "Organic Chem | L-12 | Isomerism [17-Jul-2025 11:22]", qualities: { "720P": "https://www.youtube.com/embed/KildRfurqbE" } },
+    { label: "Organic Chem | L-13 | Isomerism [17-Jul-2025 11:23]", qualities: { "720P": "https://www.youtube.com/embed/BJeaNIuJAwU" } },
+    { label: "Zoology | L-01 | Chemical Coordination and Integration [17-Jul-2025 11:29]", qualities: { "720P": "https://www.youtube.com/embed/REcMjP_Bmtg" } },
+    { label: "Zoology | L-02 | Chemical Coordination and Integration [17-Jul-2025 11:30]", qualities: { "720P": "https://www.youtube.com/embed/eQgr45c9OlE" } },
+    { label: "Zoology | L-03 | Chemical Coordination and Integration [17-Jul-2025 11:31]", qualities: { "720P": "https://www.youtube.com/embed/avB2WFcU_hk" } },
+    { label: "Zoology | L-04 | Chemical Coordination and Integration [17-Jul-2025 11:32]", qualities: { "720P": "https://www.youtube.com/embed/E8r9PIObZrk" } },
+    { label: "Zoology | L-05 | Chemical Coordination and Integration [17-Jul-2025 11:33]", qualities: { "720P": "https://www.youtube.com/embed/p5lWcvPDqFE" } },
+    { label: "Zoology | L-01 | Evolution [17-Jul-2025 11:45]", qualities: { "720P": "https://www.youtube.com/embed/kFfiuw2GR8s" } },
+    { label: "Zoology | L-02 | Evolution [17-Jul-2025 11:46]", qualities: { "720P": "https://www.youtube.com/embed/hKlbm4jtFxI" } },
+    { label: "Physics | L-02 | Newton's Laws Of Motion [17-Jul-2025 12:12]", qualities: { "720P": "https://www.youtube.com/embed/yFogqqtY74Q" } },
+    { label: "Physics | L-03 | Newton's Laws Of Motion [17-Jul-2025 12:18]", qualities: { "720P": "https://www.youtube.com/embed/P0y-F3we038" } },
+    { label: "Physics | L-04 | Newton's Laws Of Motion [17-Jul-2025 12:19]", qualities: { "720P": "https://www.youtube.com/embed/leZNV0-tuQI" } },
+    { label: "Physics | L-05 | Newton's Laws Of Motion [17-Jul-2025 12:20]", qualities: { "720P": "https://www.youtube.com/embed/5qZQzMV9UmU" } },
+    { label: "Physics | L-06(1) | Newton's Laws Of Motion [17-Jul-2025 12:21]", qualities: { "720P": "https://www.youtube.com/embed/KNudvkDrqG4" } },
+    { label: "Physics | L-06(2) | Newton's Laws Of Motion [17-Jul-2025 12:24]", qualities: { "720P": "https://www.youtube.com/embed/mjhjm7g8Jec" } },
+    { label: "Physics | L-07 | Newton's Laws Of Motion [17-Jul-2025 12:26]", qualities: { "720P": "https://www.youtube.com/embed/ak821lkSSzM" } },
+    { label: "Physics | L-08 | Newton's Laws Of Motion [17-Jul-2025 12:27]", qualities: { "720P": "https://www.youtube.com/embed/2yViE_E8d0s" } },
+    { label: "Physics | L-09 | Newton's Laws Of Motion [17-Jul-2025 12:28]", qualities: { "720P": "https://www.youtube.com/embed/ZS2lZ9ys5nE" } },
+    { label: "Physics | L-10 | Newton's Laws Of Motion [17-Jul-2025 12:29]", qualities: { "720P": "https://www.youtube.com/embed/D8aGmiAVi40" } }
+  ],
+  pdfs: []
+},
+  {name:"MAZA 3", videos:[
+  { label: "Zoology | L-01 | Body Fluids and Circulation [17-Jul-2025 13:21]", qualities: { "720P": "https://www.youtube.com/embed/LaKdLiN0JrI" } },
+  { label: "Zoology | L-02 | Body Fluids and Circulation [17-Jul-2025 13:22]", qualities: { "720P": "https://www.youtube.com/embed/qShUMwV3aPM" } },
+  { label: "Zoology | L-03 | Body Fluids and Circulation [17-Jul-2025 13:23]", qualities: { "720P": "https://www.youtube.com/embed/yGQdhJtHB2I" } },
+  { label: "Zoology | L-04 | Body Fluids and Circulation [17-Jul-2025 13:24]", qualities: { "720P": "https://www.youtube.com/embed/5jl7Yo_Ck98" } },
+  { label: "Zoology | L-05 | Body Fluids and Circulation [17-Jul-2025 13:25]", qualities: { "720P": "https://www.youtube.com/embed/uNujQICUHyk" } },
+  { label: "Zoology | L-06 | Body Fluids and Circulation [17-Jul-2025 13:26]", qualities: { "720P": "https://www.youtube.com/embed/NvdOsk-ejs0" } },
+  { label: "Zoology | L-01 | Neural control and coordination [17-Jul-2025 17:14]", qualities: { "720P": "https://www.youtube.com/embed/Cr18mtEB-KU" } },
+  { label: "Zoology | L-02 | Neural control and coordination [17-Jul-2025 17:15]", qualities: { "720P": "https://www.youtube.com/embed/_vaxXchJwPc" } },
+  { label: "Zoology | L-03 | Neural control and coordination [17-Jul-2025 17:16]", qualities: { "720P": "https://www.youtube.com/embed/yXPQXj7cbrs" } },
+  { label: "Zoology | L-04 | Neural control and coordination [17-Jul-2025 17:17]", qualities: { "720P": "https://www.youtube.com/embed/08XxJMwksQI" } },
+  { label: "Zoology | L-05 | Neural control and coordination [17-Jul-2025 17:19]", qualities: { "720P": "https://www.youtube.com/embed/5L6H4LTc6S8" } },
+  { label: "Zoology | L-01 | Chemical Coordination and Integration [17-Jul-2025 17:21]", qualities: { "720P": "https://www.youtube.com/embed/b0lRxNqKmT0" } },
+  { label: "Zoology | L-02 | Chemical Coordination and Integration [17-Jul-2025 17:22]", qualities: { "720P": "https://www.youtube.com/embed/OpfEshtTLJs" } },
+  { label: "Zoology | L-03 | Chemical Coordination and Integration [17-Jul-2025 17:23]", qualities: { "720P": "https://www.youtube.com/embed/SK1v5_1yZ4Q" } },
+  { label: "Zoology | L-04 | Chemical Coordination and Integration [17-Jul-2025 17:24]", qualities: { "720P": "https://www.youtube.com/embed/a_nb9UQ8yGY" } },
+  { label: "Zoology | L-05 | Chemical Coordination and Integration [17-Jul-2025 17:25]", qualities: { "720P": "https://www.youtube.com/embed/DRYX2SknbvY" } },
+  { label: "Physics | L-01 | Basic Maths and Vector [17-Jul-2025 17:26]", qualities: { "720P": "https://www.youtube.com/embed/uX6n60S5R7U" } },
+  { label: "Physics | L-02 | Basic Maths and Vector [17-Jul-2025 17:27]", qualities: { "720P": "https://www.youtube.com/embed/-_g22BTVjyI" } },
+  { label: "Physics | L-03 | Basic Maths and Vector [17-Jul-2025 17:28]", qualities: { "720P": "https://www.youtube.com/embed/ed6y6c5eTEE" } },
+  { label: "Physics | L-04 | Basic Maths and Vector [17-Jul-2025 17:29]", qualities: { "720P": "https://www.youtube.com/embed/jJtK7Z10ZKI" } },
+  { label: "Physics | L-05 | Basic Maths and Vector [17-Jul-2025 17:30]", qualities: { "720P": "https://www.youtube.com/embed/hxLn175jMtI" } },
+  { label: "Physics | L-06 | Basic Maths and Vector [17-Jul-2025 17:31]", qualities: { "720P": "https://www.youtube.com/embed/532-1xaqPVw" } },
+  { label: "Physics | L-07 | Basic Maths and Vector [17-Jul-2025 17:32]", qualities: { "720P": "https://www.youtube.com/embed/HZpUVgGKfjk" } },
+  { label: "Physics | L-08 | Basic Maths and Vector [17-Jul-2025 17:33]", qualities: { "720P": "https://www.youtube.com/embed/7WtCNxoa4Bc" } },
+  { label: "Physics | L-09 | Basic Maths and Vector [17-Jul-2025 17:34]", qualities: { "720P": "https://www.youtube.com/embed/02aRBjPWLLg" } },
+  { label: "Physics | L-10 | Basic Maths and Vector [17-Jul-2025 17:35]", qualities: { "720P": "https://www.youtube.com/embed/ZPLlNT1AlTg" } },
+  { label: "Physics | L-11 | Basic Maths and Vector [17-Jul-2025 17:36]", qualities: { "720P": "https://www.youtube.com/embed/6Mumx3bWzAc" } },
+  { label: "Physics | L-01 | Newton's Laws Of Motion [17-Jul-2025 17:38]", qualities: { "720P": "https://www.youtube.com/embed/rRjXieSWEqo" } },
+  { label: "Physics | L-02 | Newton's Laws Of Motion [17-Jul-2025 17:40]", qualities: { "720P": "https://www.youtube.com/embed/J271Pr440ng" } },
+  { label: "Physics | L-03 | Newton's Laws Of Motion [17-Jul-2025 17:41]", qualities: { "720P": "https://www.youtube.com/embed/8XdRb4_j5dc" } },
+  { label: "Physics | L-04 | Newton's Laws Of Motion [17-Jul-2025 17:42]", qualities: { "720P": "https://www.youtube.com/embed/Sc0ieWlYYq4" } },
+  { label: "Physics | L-05 | Newton's Laws Of Motion [17-Jul-2025 17:43]", qualities: { "720P": "https://www.youtube.com/embed/qa-UruxscyE" } },
+  { label: "Physics | L-06 | Newton's Laws Of Motion [17-Jul-2025 17:44]", qualities: { "720P": "https://www.youtube.com/embed/bnUvReUojYQ" } },
+  { label: "Physics | L-07 | Newton's Laws Of Motion [17-Jul-2025 17:45]", qualities: { "720P": "https://www.youtube.com/embed/hGaVEusydXU" } },
+  { label: "Physics | L-08 | Newton's Laws Of Motion [17-Jul-2025 17:46]", qualities: { "720P": "https://www.youtube.com/embed/9I8g1WN1VFs" } },
+  { label: "Physics | L-09 | Newton's Laws Of Motion [17-Jul-2025 17:47]", qualities: { "720P": "https://www.youtube.com/embed/vutZK1d9dc8" } },
+  { label: "Physics | L-10 | Newton's Laws Of Motion [17-Jul-2025 17:48]", qualities: { "720P": "https://www.youtube.com/embed/Gyq7fYB9g_8" } }
+] ,
+ pdfs:[]},
+  {name:"MAZA 4", videos:[
+  { label: "Physics | L-01 | Basic Maths and vector [16-Jul-2025 10:54]", qualities: { "720P": "https://www.youtube.com/embed/D9GW9lbbbu4" } },
+  { label: "Physics | L-02 | Basic maths and vector [16-Jul-2025 10:55]", qualities: { "720P": "https://www.youtube.com/embed/Te5-0HZwtN0" } },
+  { label: "Physics | L-03 | Basic maths and vector [16-Jul-2025 10:56]", qualities: { "720P": "https://www.youtube.com/embed/wD1rMxLdDfg" } },
+  { label: "Physics | L-04 | Basic maths and vector [16-Jul-2025 10:59]", qualities: { "720P": "https://www.youtube.com/embed/OxXqhsM7zvI" } },
+  { label: "Physics | L-05 | Basic maths and vector [16-Jul-2025 11:00]", qualities: { "720P": "https://www.youtube.com/embed/OP52ugB9ydQ" } },
+  { label: "Physics | L-06 | Basic maths and vector [16-Jul-2025 11:01]", qualities: { "720P": "https://www.youtube.com/embed/hZZjKJkUR5g" } },
+  { label: "Physics | L-07 | Basic maths and vector [16-Jul-2025 11:02]", qualities: { "720P": "https://www.youtube.com/embed/fPdp9m49syQ" } },
+  { label: "Physics | L-08 | Basic maths and vector [16-Jul-2025 11:03]", qualities: { "720P": "https://www.youtube.com/embed/slowfZSz_iM" } },
+  { label: "Physics | L-01 | Electrostatics [16-Jul-2025 11:08]", qualities: { "720P": "https://www.youtube.com/embed/depkC2P5Hz8" } },
+  { label: "Physics | L-02 | Electrostatics [16-Jul-2025 11:10]", qualities: { "720P": "https://www.youtube.com/embed/VOw4ARNmfXI" } },
+  { label: "Physics | L-03 | Electrostatics [16-Jul-2025 11:20]", qualities: { "720P": "https://www.youtube.com/embed/a8QF1Uup6PM" } },
+  { label: "Physics | L-04 | Electrostatics [16-Jul-2025 11:21]", qualities: { "720P": "https://www.youtube.com/embed/G3OJIN-Nlhk" } },
+  { label: "Physics | L-05 | Electrostatics [16-Jul-2025 11:22]", qualities: { "720P": "https://www.youtube.com/embed/ddpy1fG-6vI" } },
+  { label: "Physics | L-06 | Electrostatics [16-Jul-2025 11:23]", qualities: { "720P": "https://www.youtube.com/embed/FkQHtjRZSYw" } },
+  { label: "Physics | L-07 | Electrostatics [16-Jul-2025 11:24]", qualities: { "720P": "https://www.youtube.com/embed/RdS_PEcNPM4" } },
+  { label: "Physics | L-08 | Electrostatics [16-Jul-2025 11:25]", qualities: { "720P": "https://www.youtube.com/embed/Jlzyp2ycEgc" } },
+  { label: "Physics | L-09 | Electrostatics [16-Jul-2025 11:27]", qualities: { "720P": "https://www.youtube.com/embed/F8sfDRB-fTM" } },
+  { label: "Physics | L-10 | Electrostatics [16-Jul-2025 11:28]", qualities: { "720P": "https://www.youtube.com/embed/Roseexj-Y6E" } },
+  { label: "Physics | L-11 | Electrostatics [16-Jul-2025 11:29]", qualities: { "720P": "https://www.youtube.com/embed/VdWOhsghfO4" } },
+  { label: "Botany | L-01 | Molecular Basis of Inheritance [16-Jul-2025 12:17]", qualities: { "720P": "https://www.youtube.com/embed/NRgZlcPgvLc" } },
+  { label: "Botany | L-02 | Molecular Basis of Inheritance [16-Jul-2025 12:19]", qualities: { "720P": "https://www.youtube.com/embed/BFoomDCTEME" } },
+  { label: "Botany | L-03 | Molecular Basis of Inheritance [16-Jul-2025 12:21]", qualities: { "720P": "https://www.youtube.com/embed/N8LkwmbQnDM" } },
+  { label: "Botany | L-04 | Molecular Basis of Inheritance [16-Jul-2025 12:21]", qualities: { "720P": "https://www.youtube.com/embed/3XMeCzb616s" } },
+  { label: "Botany | L-05 | Molecular Basis of Inheritance [16-Jul-2025 12:28]", qualities: { "720P": "https://www.youtube.com/embed/0x5wexpGR2Q" } },
+  { label: "Botany | L-07 | Molecular Basis of Inheritance [16-Jul-2025 12:29]", qualities: { "720P": "https://www.youtube.com/embed/UTf0wlH1i84" } },
+  { label: "Botany | L-06 | Molecular Basis of Inheritance [16-Jul-2025 12:29]", qualities: { "720P": "https://www.youtube.com/embed/ILcqSk2omsw" } },
+  { label: "Botany | L-08 | Molecular Basis of Inheritance [16-Jul-2025 12:30]", qualities: { "720P": "https://www.youtube.com/embed/jR2Faisvpqo" } },
+  { label: "Botany | L-09 | Molecular Basis of Inheritance [16-Jul-2025 12:31]", qualities: { "720P": "https://www.youtube.com/embed/k60vWqHBQ_0" } },
+  { label: "Botany | L-10 | Molecular Basis of Inheritance [16-Jul-2025 12:32]", qualities: { "720P": "https://www.youtube.com/embed/cNEVVlXRr7o" } },
+  { label: "Botany | L-11 | Molecular Basis of Inheritance [16-Jul-2025 12:33]", qualities: { "720P": "https://www.youtube.com/embed/l5apHkLezyw" } },
+  { label: "Botany | L-12 | Molecular Basis of Inheritance [16-Jul-2025 12:34]", qualities: { "720P": "https://www.youtube.com/embed/-0CHlRmq0O4" } },
+  { label: "Botany | L-13 | Molecular Basis of Inheritance [16-Jul-2025 12:35]", qualities: { "720P": "https://www.youtube.com/embed/fAWJ9mLEPHg" } },
+  { label: "Botany | L-14 | Molecular Basis of Inheritance [16-Jul-2025 12:36]", qualities: { "720P": "https://www.youtube.com/embed/Co1AouLK_pA" } },
+  { label: "Botany | L-15 | Molecular Basis of Inheritance [16-Jul-2025 12:37]", qualities: { "720P": "https://www.youtube.com/embed/DiBxly7ZEZo" } },
+  { label: "Botany | L-16 | Molecular Basis of Inheritance [16-Jul-2025 12:38]", qualities: { "720P": "https://www.youtube.com/embed/_pZmY1l-sqY" } },
+  { label: "Botany | L-17 | Molecular Basis of Inheritance [16-Jul-2025 12:39]", qualities: { "720P": "https://www.youtube.com/embed/zJdtMSr6hhc" } },
+  { label: "Botany | L-18 | Molecular Basis of Inheritance [16-Jul-2025 12:40]", qualities: { "720P": "https://www.youtube.com/embed/0Q5cVZEiVZo" } },
+  { label: "Botany | L-19 | Molecular Basis of Inheritance [16-Jul-2025 12:41]", qualities: { "720P": "https://www.youtube.com/embed/VddN65DY-RU" } },
+  { label: "Physical Chem | L-01 | Chemical Kinetics [16-Jul-2025 12:45]", qualities: { "720P": "https://www.youtube.com/embed/1aJKNnXwft8" } },
+  { label: "Physical Chem | L-02 | Chemical Kinetics [16-Jul-2025 12:51]", qualities: { "720P": "https://www.youtube.com/embed/TRKb0Pf54qY" } },
+  { label: "Physical Chem | L-03 | Chemical Kinetics [16-Jul-2025 12:53]", qualities: { "720P": "https://www.youtube.com/embed/oNhpOPhcXBo" } },
+  { label: "Physical Chem | L-04 | Chemical Kinetics [16-Jul-2025 12:54]", qualities: { "720P": "https://www.youtube.com/embed/jnvQ_jzpBsw" } },
+  { label: "Physical Chem | L-05 | Chemical Kinetics [16-Jul-2025 12:55]", qualities: { "720P": "https://www.youtube.com/embed/yLyKbWP-4SU" } },
+  { label: "Physical Chem | L-06 | Chemical Kinetics [16-Jul-2025 12:56]", qualities: { "720P": "https://www.youtube.com/embed/MIJIoQwbxOs" } },
+  { label: "Physical Chem | L-07 | Chemical Kinetics [16-Jul-2025 12:57]", qualities: { "720P": "https://www.youtube.com/embed/IUWzEQA5Xss" } },
+  { label: "Physical Chem | L-08 | Chemical Kinetics [16-Jul-2025 13:01]", qualities: { "720P": "https://www.youtube.com/embed/1g_SHEZ8e2s" } },
+  { label: "Physical Chem | L-09 | Chemical Kinetics [16-Jul-2025 13:02]", qualities: { "720P": "https://www.youtube.com/embed/lUqCKFeNFBU" } },
+  { label: "Physical Chem | L-10 | Chemical Kinetics [16-Jul-2025 13:29]", qualities: { "720P": "https://www.youtube.com/embed/dJVUaRrREss" } },
+  { label: "Physical Chem | L-11 | Chemical Kinetics [16-Jul-2025 13:30]", qualities: { "720P": "https://www.youtube.com/embed/5R5lA52DAN8" } },
+  { label: "Physical Chem | L-12 | Chemical Kinetics [16-Jul-2025 13:31]", qualities: { "720P": "https://www.youtube.com/embed/d984oGi9WXI" } },
+  { label: "Physical Chem | L-01 | Solution [16-Jul-2025 13:50]", qualities: { "720P": "https://www.youtube.com/embed/J5E8QaYM5Q0" } },
+  { label: "Physical Chem | L-02 | Solution [16-Jul-2025 13:51]", qualities: { "720P": "https://www.youtube.com/embed/N1Q4EoOp920" } },
+  { label: "Physical Chem | L-03 | Solution [16-Jul-2025 13:52]", qualities: { "720P": "https://www.youtube.com/embed/hnYqRu4spBI" } },
+  { label: "Physical Chem | L-04 | Solution [16-Jul-2025 13:53]", qualities: { "720P": "https://www.youtube.com/embed/GcQIGx7M0Vo" } },
+  { label: "Physical Chem | L-05 | Solution [16-Jul-2025 13:54]", qualities: { "720P": "https://www.youtube.com/embed/4r28woqZ_1o" } },
+  { label: "Physical Chem | L-06 | Solution [16-Jul-2025 13:55]", qualities: { "720P": "https://www.youtube.com/embed/oI94e_dsp8w" } },
+  { label: "Physical Chem | L-07 | Solution [18-Jul-2025 10:36]", qualities: { "720P": "https://www.youtube.com/embed/wmxknsiyuNI" } }
+],
+ pdfs:[]},
+  {name:"MAZA 5", videos:[
+  { label: "Physics | L-01 | Electrostatics [17-Jul-2025 13:35]", qualities: { "720P": "https://www.youtube.com/embed/YKg7s4nnAFw" } },
+  { label: "Physics | L-02 | Electrostatics [17-Jul-2025 13:47]", qualities: { "720P": "https://www.youtube.com/embed/Hp8lTlQ0Bww" } },
+  { label: "Physics | L-03 | Electrostatics [17-Jul-2025 13:49]", qualities: { "720P": "https://www.youtube.com/embed/OGvsiFvCowA" } },
+  { label: "Physics | L-04 | Electrostatics [17-Jul-2025 13:51]", qualities: { "720P": "https://www.youtube.com/embed/1wiQR_TQ8s8" } },
+  { label: "Physics | L-05 | Electrostatics [17-Jul-2025 13:51]", qualities: { "720P": "https://www.youtube.com/embed/0fMPaBUiJfs" } },
+  { label: "Physics | L-06 | Electrostatics [17-Jul-2025 13:54]", qualities: { "720P": "https://www.youtube.com/embed/MhpwXW51YvY" } },
+  { label: "Physics | L-07 | Electrostatics [17-Jul-2025 14:01]", qualities: { "720P": "https://www.youtube.com/embed/x1MtOpe855o" } },
+  { label: "Physics | L-08 | Electrostatics [17-Jul-2025 14:03]", qualities: { "720P": "https://www.youtube.com/embed/9M4O_N4Df5c" } },
+  { label: "Physics | L-09 | Electrostatics [17-Jul-2025 14:05]", qualities: { "720P": "https://www.youtube.com/embed/0mttjfxKj10" } },
+  { label: "Physics | L-10 | Electrostatics [17-Jul-2025 14:06]", qualities: { "720P": "https://www.youtube.com/embed/eET1wLvtPuo" } },
+  { label: "Physics | L-11| Electrostatics [17-Jul-2025 14:08]", qualities: { "720P": "https://www.youtube.com/embed/RVuFMEVWAq0" } },
+  { label: "Botany| L-14 | Molecular Basis Of Inheritance [17-Jul-2025 14:10]", qualities: { "720P": "https://www.youtube.com/embed/6KEvX_1Iozk" } },
+  { label: "Botany| L-15 | Molecular Basis Of Inheritance [17-Jul-2025 14:30]", qualities: { "720P": "https://www.youtube.com/embed/s24tn4SsrQY" } },
+  { label: "Botany| L-16 | Molecular Basis Of Inheritance [17-Jul-2025 14:32]", qualities: { "720P": "https://www.youtube.com/embed/uTBQq4wiRuw" } },
+  { label: "Botany| L-17 | Molecular Basis Of Inheritance [17-Jul-2025 14:34]", qualities: { "720P": "https://www.youtube.com/embed/jgkXAeLlXZo" } },
+  { label: "Botany| L-18 | Molecular Basis Of Inheritance [17-Jul-2025 14:35]", qualities: { "720P": "https://www.youtube.com/embed/dX3RNNq4MWQ" } },
+  { label: "Botany| L-19 | Molecular Basis Of Inheritance [17-Jul-2025 14:36]", qualities: { "720P": "https://www.youtube.com/embed/P3jmQh_EjZ8" } },
+  { label: "Botany| L-01 | Principles Of Inheritance And Variation [17-Jul-2025 14:39]", qualities: { "720P": "https://www.youtube.com/embed/_GquE6hMOx4" } },
+  { label: "Physical Chemistry | L-01 | Solution [17-Jul-2025 14:47]", qualities: { "720P": "https://www.youtube.com/embed/I1oql1qkeHc" } },
+  { label: "Physical Chemistry | L-02 | Solution [17-Jul-2025 15:25]", qualities: { "720P": "https://www.youtube.com/embed/BsptSbeYFy4" } },
+  { label: "Physical Chemistry | L-03 | Solution [17-Jul-2025 15:30]", qualities: { "720P": "https://www.youtube.com/embed/5PhAy-RzeMQ" } },
+  { label: "Physical Chemistry | L-04 | Solution [17-Jul-2025 15:37]", qualities: { "720P": "https://www.youtube.com/embed/XY9Dl1Ns8Cg" } },
+  { label: "Physical Chemistry | L-05 | Solution [17-Jul-2025 15:40]", qualities: { "720P": "https://www.youtube.com/embed/GKbiNUC9KwE" } },
+  { label: "Physical Chemistry | L-06 | Solution [17-Jul-2025 15:43]", qualities: { "720P": "https://www.youtube.com/embed/HQtMasCEokk" } },
+  { label: "Physical Chemistry | L-07 | Solution [17-Jul-2025 15:52]", qualities: { "720P": "https://www.youtube.com/embed/NUBBq86rGAE" } },
+  { label: "Physical Chemistry | L-08 | Solution [17-Jul-2025 16:04]", qualities: { "720P": "https://www.youtube.com/embed/c9glafh7FxY" } }
+], 
+pdfs:[]},
+  {name:"MAZA 6", videos:[
+  { label: "Botany | L-01 | Molecular Basis of Inheritance [18-Jul-2025 07:18]", qualities: { "720P": "https://www.youtube.com/embed/NRgZlcPgvLc" } },
+  { label: "Botany | L-02 | Molecular Basis of Inheritance [18-Jul-2025 07:20]", qualities: { "720P": "https://www.youtube.com/embed/BFoomDCTEME" } },
+  { label: "Botany | L-03 | Molecular Basis of Inheritance [18-Jul-2025 07:23]", qualities: { "720P": "https://www.youtube.com/embed/N8LkwmbQnDM" } },
+  { label: "Botany | L-04 | Molecular Basis of Inheritance [18-Jul-2025 07:24]", qualities: { "720P": "https://www.youtube.com/embed/3XMeCzb616s" } },
+  { label: "Botany | L-05 | Molecular Basis of Inheritance [18-Jul-2025 07:25]", qualities: { "720P": "https://www.youtube.com/embed/0x5wexpGR2Q" } },
+  { label: "Botany | L-06 | Molecular Basis of Inheritance [18-Jul-2025 07:26]", qualities: { "720P": "https://www.youtube.com/embed/ILcqSk2omsw" } },
+  { label: "Botany | L-07 | Molecular Basis of Inheritance [18-Jul-2025 07:27]", qualities: { "720P": "https://www.youtube.com/embed/UTf0wlH1i84" } },
+  { label: "Botany | L-08 | Molecular Basis of Inheritance [18-Jul-2025 07:28]", qualities: { "720P": "https://www.youtube.com/embed/jR2Faisvpqo" } },
+  { label: "Botany | L-09 | Molecular Basis of Inheritance [18-Jul-2025 07:29]", qualities: { "720P": "https://www.youtube.com/embed/k60vWqHBQ_0" } },
+  { label: "Botany | L-10 | Molecular Basis of Inheritance [18-Jul-2025 07:30]", qualities: { "720P": "https://www.youtube.com/embed/cNEVVlXRr7o" } },
+  { label: "Botany | L-11 | Molecular Basis of Inheritance [18-Jul-2025 07:31]", qualities: { "720P": "https://www.youtube.com/embed/l5apHkLezyw" } },
+  { label: "Botany | L-12 | Molecular Basis of Inheritance [18-Jul-2025 07:32]", qualities: { "720P": "https://www.youtube.com/embed/-0CHlRmq0O4" } },
+  { label: "Botany | L-14 | Molecular Basis of Inheritance [18-Jul-2025 07:33]", qualities: { "720P": "https://www.youtube.com/embed/Co1AouLK_pA" } },
+  { label: "Botany | L-13 | Molecular Basis of Inheritance [18-Jul-2025 07:33]", qualities: { "720P": "https://www.youtube.com/embed/fAWJ9mLEPHg" } },
+  { label: "Botany | L-15 | Molecular Basis of Inheritance [18-Jul-2025 07:34]", qualities: { "720P": "https://www.youtube.com/embed/DiBxly7ZEZo" } },
+  { label: "Botany | L-16 | Molecular Basis of Inheritance [18-Jul-2025 07:35]", qualities: { "720P": "https://www.youtube.com/embed/_pZmY1l-sqY" } },
+  { label: "Botany | L-17 | Molecular Basis of Inheritance [18-Jul-2025 07:36]", qualities: { "720P": "https://www.youtube.com/embed/zJdtMSr6hhc" } },
+  { label: "Botany | L-18 | Molecular Basis of Inheritance [18-Jul-2025 07:37]", qualities: { "720P": "https://www.youtube.com/embed/0Q5cVZEiVZo" } },
+  { label: "Botany | L-19 | Molecular Basis of Inheritance [18-Jul-2025 07:38]", qualities: { "720P": "https://www.youtube.com/embed/VddN65DY-RU" } },
+  { label: "Physics | L-01 | Basic Maths and Vector [18-Jul-2025 08:41]", qualities: { "720P": "https://www.youtube.com/embed/Uy09BRwO2Y8" } },
+  { label: "Physics | L-02 | Basic Maths and Vector [18-Jul-2025 08:42]", qualities: { "720P": "https://www.youtube.com/embed/lJMF8xv7PP0" } },
+  { label: "Physics | L-03 | Basic Maths and Vector [18-Jul-2025 08:43]", qualities: { "720P": "https://www.youtube.com/embed/kg5xjVZy0Pc" } },
+  { label: "Physics | L-04 | Basic Maths and Vector [18-Jul-2025 08:44]", qualities: { "720P": "https://www.youtube.com/embed/_xBJYTclSrM" } },
+  { label: "Physics | L-05 | Basic Maths and Vector [18-Jul-2025 08:45]", qualities: { "720P": "https://www.youtube.com/embed/5iZsg4X6YUA" } },
+  { label: "Physics | L-06 | Basic Maths and Vector [18-Jul-2025 08:46]", qualities: { "720P": "https://www.youtube.com/embed/iw5RmkA-zZc" } },
+  { label: "Physics | L-07 | Basic Maths and Vector [18-Jul-2025 08:47]", qualities: { "720P": "https://www.youtube.com/embed/J4GkfCotFYY" } },
+  { label: "Physics | L-08 | Basic Maths and Vector [18-Jul-2025 08:48]", qualities: { "720P": "https://www.youtube.com/embed/onzmBxq1qk4" } },
+  { label: "Physics | L-01 | Electrostatics [18-Jul-2025 08:49]", qualities: { "720P": "https://www.youtube.com/embed/il7VIVzh11Y" } },
+  { label: "Physics | L-02 | Electrostatic [18-Jul-2025 08:50]", qualities: { "720P": "https://www.youtube.com/embed/yBNq87mHUag" } },
+  { label: "Physics | L-02 | Electrostatic [18-Jul-2025 08:51]", qualities: { "720P": "https://www.youtube.com/embed/yBNq87mHUag" } },
+  { label: "Physics | L-03 | Electrostatic [18-Jul-2025 08:52]", qualities: { "720P": "https://www.youtube.com/embed/XL-inwrVhv4" } },
+  { label: "Physics | L-04 | Electrostatic [18-Jul-2025 08:53]", qualities: { "720P": "https://www.youtube.com/embed/zdfaBIqqcxE" } },
+  { label: "Physics | L-05 | Electrostatic [18-Jul-2025 08:54]", qualities: { "720P": "https://www.youtube.com/embed/UxUvCrSmbBU" } },
+  { label: "Physics | L-06 | Electrostatic [18-Jul-2025 08:56]", qualities: { "720P": "https://www.youtube.com/embed/_do1uKuqVFs" } },
+  { label: "Physics | L-07 | Electrostatic [18-Jul-2025 08:57]", qualities: { "720P": "https://www.youtube.com/embed/DI3nFua3Qmw" } },
+  { label: "Physics | L-08 | Electrostatic [18-Jul-2025 08:59]", qualities: { "720P": "https://www.youtube.com/embed/HsgAb9v-sEA" } },
+  { label: "Physics | L-09 | Electrostatic [18-Jul-2025 09:00]", qualities: { "720P": "https://www.youtube.com/embed/Zxf5alkxcjA" } },
+  { label: "Physics | L-10 | Electrostatic [18-Jul-2025 09:01]", qualities: { "720P": "https://www.youtube.com/embed/EJy9xRmgfkI" } },
+  { label: "Physics | L-11 | Electrostatic [18-Jul-2025 09:03]", qualities: { "720P": "https://www.youtube.com/embed/x6rkUoBmtLw" } },
+  { label: "Physics | L-12 | Electrostatic [18-Jul-2025 09:04]", qualities: { "720P": "https://www.youtube.com/embed/ymmrvGpXLpI" } },
+  { label: "Physics | L-13 | Electrostatic [18-Jul-2025 09:05]", qualities: { "720P": "https://www.youtube.com/embed/cRIuP7h7_LY" } },
+  { label: "Physical Chem | L-01 | Chemical Kinetics [18-Jul-2025 09:14]", qualities: { "720P": "https://www.youtube.com/embed/s8A5AetyMwE" } },
+  { label: "Physical Chem | L-02 | Chemical Kinetics [18-Jul-2025 09:15]", qualities: { "720P": "https://www.youtube.com/embed/mLRItuPUDZY" } },
+  { label: "Physical Chem | L-03 | Chemical Kinetics [18-Jul-2025 09:16]", qualities: { "720P": "https://www.youtube.com/embed/oMnb3MXZ5eo" } },
+  { label: "Physical Chem | L-04 | Chemical Kinetics [18-Jul-2025 09:17]", qualities: { "720P": "https://www.youtube.com/embed/z2wonQAKuZw" } },
+  { label: "Physical Chem | L-05 | Chemical Kinetics [18-Jul-2025 09:18]", qualities: { "720P": "https://www.youtube.com/embed/kMRy0U9Kk9w" } },
+  { label: "Physical Chem | L-06 | Chemical Kinetics [18-Jul-2025 09:18]", qualities: { "720P": "https://www.youtube.com/embed/glWyaAUneVg" } },
+  { label: "Physical Chem | L-07 | Chemical Kinetics [18-Jul-2025 09:20]", qualities: { "720P": "https://www.youtube.com/embed/ts_-fWWojo4" } },
+  { label: "Physical Chem | L-09 | Chemical Kinetics [18-Jul-2025 09:33]", qualities: { "720P": "https://www.youtube.com/embed/kC-a-HVk4xs" } },
+  { label: "Physical Chem | L-08 | Chemical Kinetics [18-Jul-2025 09:33]", qualities: { "720P": "https://www.youtube.com/embed/kil_19qotJM" } },
+  { label: "Physical Chem | L-09 | Chemical Kinetics [18-Jul-2025 09:35]", qualities: { "720P": "https://www.youtube.com/embed/kC-a-HVk4xs" } },
+  { label: "Physical Chem | L-10 | Chemical Kinetics [18-Jul-2025 09:36]", qualities: { "720P": "https://www.youtube.com/embed/pgQNmwlbdjk" } },
+  { label: "Physical Chem | L-11 | Chemical Kinetics [18-Jul-2025 09:37]", qualities: { "720P": "https://www.youtube.com/embed/I1-jSoIo1gQ" } },
+  { label: "Physical Chem | L-12 | Chemical Kinetics [18-Jul-2025 09:41]", qualities: { "720P": "https://www.youtube.com/embed/KiaAvS7O9U4" } },
+  { label: "Physical Chem | L-01 | Solution [18-Jul-2025 10:26]", qualities: { "720P": "https://www.youtube.com/embed/rEXHdCShIpI" } },
+  { label: "Physical Chem | L-02 | Solution [18-Jul-2025 10:27]", qualities: { "720P": "https://www.youtube.com/embed/vYQvgZUxrjs" } },
+  { label: "Physical Chem | L-03 | Solution [18-Jul-2025 10:28]", qualities: { "720P": "https://www.youtube.com/embed/hlCj2WcBQb8" } },
+  { label: "Physical Chem | L-04 | Solution [18-Jul-2025 10:29]", qualities: { "720P": "https://www.youtube.com/embed/ciYGudf6bTI" } },
+  { label: "Physical Chem | L-05 | Solution [18-Jul-2025 10:30]", qualities: { "720P": "https://www.youtube.com/embed/DB9ea-cCgQg" } },
+  { label: "Physical Chem | L-06 | Solution [18-Jul-2025 10:31]", qualities: { "720P": "https://www.youtube.com/embed/H7HNZwxihiA" } },
+  { label: "Physical Chem | L-07 | Solution [18-Jul-2025 10:32]", qualities: { "720P": "https://www.youtube.com/embed/hEGkqEAKoys" } }
+], 
+pdfs:[]},
+  {name:"MAZA 7", videos:[
+  { label: "Inorganic Chem | L-02 | Periodic Table [16-Jul-2025 11:56]", qualities: { "720P": "https://www.youtube.com/embed/ubxqvw5Hhpc" } },
+  { label: "Inorganic Chem | L-03 | Periodic Table [16-Jul-2025 12:01]", qualities: { "720P": "https://www.youtube.com/embed/cuKlO6HQr10" } },
+  { label: "Inorganic Chem | L-04 | Periodic Table [16-Jul-2025 12:03]", qualities: { "720P": "https://www.youtube.com/embed/EJ-mduKjyCM" } },
+  { label: "Inorganic Chem | L-05 | Periodic Table [16-Jul-2025 12:04]", qualities: { "720P": "https://www.youtube.com/embed/mEH87mN5bBI" } },
+  { label: "Inorganic Chem | L-06 | Periodic Table [16-Jul-2025 12:05]", qualities: { "720P": "https://www.youtube.com/embed/c8TwtWCI5gY" } },
+  { label: "Inorganic Chem | L-07 | Periodic Table [16-Jul-2025 12:06]", qualities: { "720P": "https://www.youtube.com/embed/lORc9s_7kes" } },
+  { label: "Inorganic Chem | L-08 | Periodic Table [16-Jul-2025 12:07]", qualities: { "720P": "https://www.youtube.com/embed/4wHv3QKEHGY" } },
+  { label: "Inorganic Chem | L-09 | Periodic Table [16-Jul-2025 12:08]", qualities: { "720P": "https://www.youtube.com/embed/9czUZ7X0UYA" } },
+  { label: "Inorganic Chem | L-10 | Periodic Table [16-Jul-2025 12:10]", qualities: { "720P": "https://www.youtube.com/embed/FWEENN4pTsg" } },
+  { label: "Physics | L-02 | Basic Maths and Vector [16-Jul-2025 12:16]", qualities: { "720P": "https://www.youtube.com/embed/CvFQhZHzo_M" } },
+  { label: "Physics | L-03 | Basic Maths and Vector [16-Jul-2025 12:19]", qualities: { "720P": "https://www.youtube.com/embed/VP_l5dU8EFU" } },
+  { label: "Physics | L-04 | Basic Maths and Vector [16-Jul-2025 12:29]", qualities: { "720P": "https://www.youtube.com/embed/_4zvuT64k_4" } },
+  { label: "Physics | L-05 | Basic Maths and Vector [16-Jul-2025 12:30]", qualities: { "720P": "https://www.youtube.com/embed/XCZ_sZbC9HU" } },
+  { label: "Physics | L-01 | Gravitation [16-Jul-2025 12:34]", qualities: { "720P": "https://www.youtube.com/embed/urqsXE8lcUY" } },
+  { label: "Physics | L-02(1) | Gravitation [16-Jul-2025 12:35]", qualities: { "720P": "https://www.youtube.com/embed/GHCFtZ4K2Ss" } },
+  { label: "Physics | L-02(2) | Gravitation [16-Jul-2025 12:36]", qualities: { "720P": "https://www.youtube.com/embed/IJoYHFtyWhs" } },
+  { label: "Physics | L-03 | Gravitation [16-Jul-2025 12:39]", qualities: { "720P": "https://www.youtube.com/embed/42q4XIvgTnU" } },
+  { label: "Physics | L-04 | Gravitation [16-Jul-2025 12:40]", qualities: { "720P": "https://www.youtube.com/embed/FbQP9SPjSAI" } },
+  { label: "Physics | L-05 | Gravitation [16-Jul-2025 12:41]", qualities: { "720P": "https://www.youtube.com/embed/ntfroIPKsXM" } },
+  { label: "Physics | L-06 | Gravitation [16-Jul-2025 12:42]", qualities: { "720P": "https://www.youtube.com/embed/_T8RUfmTl4s" } },
+  { label: "Physics | L-07 | Gravitation [16-Jul-2025 12:44]", qualities: { "720P": "https://www.youtube.com/embed/P0ihLinLQVU" } },
+  { label: "Zoology | L-01 | Morphology [16-Jul-2025 12:45]", qualities: { "720P": "https://www.youtube.com/embed/oPjt1vbPcOE" } },
+  { label: "Zoology | L-02 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:16]", qualities: { "720P": "https://www.youtube.com/embed/iuXoef47RFQ" } },
+  { label: "Zoology | L-03 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:17]", qualities: { "720P": "https://www.youtube.com/embed/LgkjJHxA3cc" } },
+  { label: "Zoology | L-04 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:18]", qualities: { "720P": "https://www.youtube.com/embed/wetYgtW8ERI" } },
+  { label: "Zoology | L-05 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:20]", qualities: { "720P": "https://www.youtube.com/embed/rRsFqZXVsGk" } },
+  { label: "Zoology | L-06 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:21]", qualities: { "720P": "https://www.youtube.com/embed/LAWWpG3scys" } },
+  { label: "Zoology | L-07 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:22]", qualities: { "720P": "https://www.youtube.com/embed/amUGQ3GSaHI" } },
+  { label: "Zoology | L-08 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:23]", qualities: { "720P": "https://www.youtube.com/embed/DCgoJSiqRDI" } },
+  { label: "Zoology | L-09 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:24]", qualities: { "720P": "https://www.youtube.com/embed/dovK-p6G-j0" } },
+  { label: "Zoology | L-10 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:25]", qualities: { "720P": "https://www.youtube.com/embed/Dx6RPUqHY9w" } },
+  { label: "Zoology | L-11 | Sexual Reproduction In Flowering Plants [16-Jul-2025 13:26]", qualities: { "720P": "https://www.youtube.com/embed/rn2tuJ8dGQs" } }
+],
+ pdfs:[]},
+  {name:"MAZA 8", videos: [
+    {
+      label: "MAZA-8 - Inorganic Chem | L-05 | Periodic Table [17-Jul-2025 07:25]",
+      qualities: { "720P": "https://www.youtube.com/embed/hirDgq2aVKs" }
+    },
+    {
+      label: "MAZA-8 - Inorganic Chem | L-06 | Periodic Table [17-Jul-2025 07:27]",
+      qualities: { "720P": "https://www.youtube.com/embed/nHwBGBQEfKY" }
+    },
+    {
+      label: "MAZA-8 - Inorganic Chem | L-07 | Periodic Table [17-Jul-2025 07:38]",
+      qualities: { "720P": "https://www.youtube.com/embed/Vd2TbC6lGcA" }
+    },
+    {
+      label: "MAZA-8 - Inorganic Chem | L-08 | Periodic Table [17-Jul-2025 07:39]",
+      qualities: { "720P": "https://www.youtube.com/embed/HUFf4gXiVWs" }
+    },
+    {
+      label: "MAZA-8 - Inorganic Chem | L-09 | Periodic Table [17-Jul-2025 07:40]",
+      qualities: { "720P": "https://www.youtube.com/embed/moH7V57oryk" }
+    },
+    {
+      label: "MAZA-8 - Inorganic Chem | L-10 | Periodic Table [17-Jul-2025 07:42]",
+      qualities: { "720P": "https://www.youtube.com/embed/ZMxsdowkcGc" }
+    },
+    {
+      label: "MAZA-8 - Inorganic Chem | L-11 | Periodic Table [17-Jul-2025 07:43]",
+      qualities: { "720P": "https://www.youtube.com/embed/d2Tqb0reE4o" }
+    },
+    {
+      label: "MAZA-8 - Physics | L-05 | Basic Maths and Vector [17-Jul-2025 09:26]",
+      qualities: { "720P": "https://www.youtube.com/embed/8vvc6gm4XWI" }
+    },
+    {
+      label: "MAZA-8 - Physics | L-06 | Basic Maths and Vector [17-Jul-2025 09:28]",
+      qualities: { "720P": "https://www.youtube.com/embed/lLDnBmXATXU" }
+    },
+    {
+      label: "MAZA-8 - Physics | L-07 | Basic Maths and Vector [17-Jul-2025 09:29]",
+      qualities: { "720P": "https://www.youtube.com/embed/C3-GSLtQ-DY" }
+    },
+    {
+      label: "MAZA-8 - Physics | L-02 | Newton's Laws Of Motion [17-Jul-2025 09:36]",
+      qualities: { "720P": "https://www.youtube.com/embed/mMgfs0FDKEQ" }
+    },
+    {
+      label: "MAZA-8 - Physics | L-01 | Newton's Laws Of Motion [17-Jul-2025 09:36]",
+      qualities: { "720P": "https://www.youtube.com/embed/4RvXjIrTTlU" }
+    },
+    {
+      label: "MAZA-8 - Physics | L-03 | Newton's Laws Of Motion [17-Jul-2025 09:37]",
+      qualities: { "720P": "https://www.youtube.com/embed/BhGwnLU9j6g" }
+    },
+    {
+      label: "MAZA-8 - Physics | L-04 | Newton's Laws Of Motion [17-Jul-2025 09:39]",
+      qualities: { "720P": "https://www.youtube.com/embed/-E8mVqilYoY" }
+    },
+    {
+      label: "MAZA-8 - Physics | L-05 | Newton's Laws Of Motion [17-Jul-2025 09:40]",
+      qualities: { "720P": "https://www.youtube.com/embed/9732ZPemwbg" }
+    },
+    {
+      label: "MAZA-8 - Zoology | L-05 | Sexual Reproduction In Flowering Plants [17-Jul-2025 09:57]",
+      qualities: { "720P": "https://www.youtube.com/embed/4VARYZqok_c" }
+    },
+    {
+      label: "MAZA-8 - Zoology | L-06 | Sexual Reproduction In Flowering Plants [17-Jul-2025 09:59]",
+      qualities: { "720P": "https://www.youtube.com/embed/EcGbEI-2uP4" }
+    },
+    {
+      label: "MAZA-8 - Zoology | L-07 | Sexual Reproduction In Flowering Plants [17-Jul-2025 10:00]",
+      qualities: { "720P": "https://www.youtube.com/embed/UAQqE1c4XwE" }
+    },
+    {
+      label: "MAZA-8 - Zoology | L-08 | Sexual Reproduction In Flowering Plants [17-Jul-2025 10:01]",
+      qualities: { "720P": "https://www.youtube.com/embed/QXqpc9gn-k4" }
+    },
+    {
+      label: "MAZA-8 - Zoology | L-09 | Sexual Reproduction In Flowering Plants [17-Jul-2025 10:02]",
+      qualities: { "720P": "https://www.youtube.com/embed/l_MiZ1i85UA" }
+    },
+    {
+      label: "MAZA-8 - Zoology | L-10 | Sexual Reproduction In Flowering Plants [17-Jul-2025 10:03]",
+      qualities: { "720P": "https://www.youtube.com/embed/Fmg2tbBR6u8" }
+    },
+    {
+      label: "MAZA-8 - Zoology | L-11 | Sexual Reproduction In Flowering Plants [17-Jul-2025 10:04]",
+      qualities: { "720P": "https://www.youtube.com/embed/IBV1pVxlcZM" }
+    }
+  ], pdfs:[]},
+  {name:"MAZA 9", videos:[ 
+ {
+  label: "MAZA-9 - Inorganic Chem | L-02 | Periodic Table [16-Jul-2025 14:25]",
+      qualities: { "720P": "https://www.youtube.com/embed/_FhXVq7Z8zA" }
+    },
+    {
+      label: "MAZA-9 - Inorganic Chem | L-03 | Periodic Table [16-Jul-2025 14:34]",
+      qualities: { "720P": "https://www.youtube.com/embed/9jbT9Ih1Eqo" }
+    },
+    {
+      label: "MAZA-9 - Inorganic Chem | L-04 | Periodic Table [16-Jul-2025 14:35]",
+      qualities: { "720P": "https://www.youtube.com/embed/kdzaZ9kcapE" }
+    },
+    {
+      label: "MAZA-9 - Inorganic Chem | L-05 | Periodic Table [16-Jul-2025 14:38]",
+      qualities: { "720P": "https://www.youtube.com/embed/7c5yBh6EJFc" }
+    },
+    {
+      label: "MAZA-9 - Inorganic Chem | L-06 | Periodic Table [16-Jul-2025 14:41]",
+      qualities: { "720P": "https://www.youtube.com/embed/Krc4O1GvukY" }
+    },
+    {
+      label: "MAZA-9 - Inorganic Chem | L-07 | Periodic Table [16-Jul-2025 14:45]",
+      qualities: { "720P": "https://www.youtube.com/embed/1YrMPWCJ7CA" }
+    },
+    {
+      label: "MAZA-9 - Inorganic Chem | L-08 | Periodic Table [16-Jul-2025 14:46]",
+      qualities: { "720P": "https://www.youtube.com/embed/XQqLimMS3qo" }
+    },
+    {
+      label: "MAZA-9 - Inorganic Chem | L-09 | Periodic Table [16-Jul-2025 14:47]",
+      qualities: { "720P": "https://www.youtube.com/embed/YUydLbQDLVY" }
+    },
+    {
+      label: "MAZA-9 - Inorganic Chem | L-10 | Periodic Table [16-Jul-2025 14:49]",
+      qualities: { "720P": "https://www.youtube.com/embed/iB8UrKdZ9UM" }
+    },
+    {
+      label: "MAZA-9 - Zoology | L-02  | Sexual Reproduction In Flowering Plants [16-Jul-2025 16:35]",
+      qualities: { "720P": "https://www.youtube.com/embed/LluCRwJ8xMg" }
+    },
+    {
+      label: "MAZA-9 - Zoology | L-03  | Sexual Reproduction In Flowering Plants [16-Jul-2025 16:41]",
+      qualities: { "720P": "https://www.youtube.com/embed/7Sn5KvvF9-M" }
+    },
+    {
+      label: "MAZA-9 - Zoology | L-04 | Sexual Reproduction In Flowering Plants [16-Jul-2025 16:42]",
+      qualities: { "720P": "https://www.youtube.com/embed/A71Xr4GlpHg" }
+    },
+    {
+      label: "MAZA-9 - Zoology | L-05  | Sexual Reproduction In Flowering Plants [16-Jul-2025 16:47]",
+      qualities: { "720P": "https://www.youtube.com/embed/A71Xr4GlpHg" }
+    },
+    {
+      label: "MAZA-9 - Zoology | L-06  | Sexual Reproduction In Flowering Plants [16-Jul-2025 16:48]",
+      qualities: { "720P": "https://www.youtube.com/embed/AfpzobRopVo" }
+    },
+    {
+      label: "MAZA-9 - Zoology | L-07  | Sexual reproduction in flowering plants [16-Jul-2025 17:21]",
+      qualities: { "720P": "https://www.youtube.com/embed/LnDv2L9TURk" }
+    },
+    {
+      label: "MAZA-9 - Zoology | L-08  | Sexual Reproduction In Flowering Plants [16-Jul-2025 17:22]",
+      qualities: { "720P": "https://www.youtube.com/embed/YLwRFvPB4UQ" }
+    },
+    {
+      label: "MAZA-9 - Zoology | L-09  | Sexual Reproduction In Flowering Plants [16-Jul-2025 17:24]",
+      qualities: { "720P": "https://www.youtube.com/embed/Esba5YbSoag" }
+    },
+    {
+      label: "MAZA-9 - Zoology | L-10  | Sexual Reproduction In Flowering Plants [16-Jul-2025 17:26]",
+      qualities: { "720P": "https://www.youtube.com/embed/eeIdrqyK6Fs" }
+    },
+    {
+      label: "MAZA-9 - Physics | L - 02 | Basic Maths and Vector [16-Jul-2025 17:44]",
+      qualities: { "720P": "https://www.youtube.com/embed/YtMPlxhjGi4" }
+    },
+    {
+      label: "MAZA-9 - Physics | L - 03 | Basic Maths and Vector [16-Jul-2025 17:51]",
+      qualities: { "720P": "https://www.youtube.com/embed/YtMPlxhjGi4" }
+    },
+    {
+      label: "MAZA-9 - Physics | L - 04 | Basic Maths and Vector [16-Jul-2025 17:52]",
+      qualities: { "720P": "https://www.youtube.com/embed/TANBFUpP2Ws" }
+    },
+    {
+      label: "MAZA-9 - Physics | L - 06 | Basic Maths and Vector [16-Jul-2025 17:53]",
+      qualities: { "720P": "https://www.youtube.com/embed/WeR0wa2zURg" }
+    },
+    {
+      label: "MAZA-9 - Physics | L - 05 | Basic Maths and Vector [16-Jul-2025 17:53]",
+      qualities: { "720P": "https://www.youtube.com/embed/NB1oYmoZJvA" }
+    },
+    {
+      label: "MAZA-9 - Physics | L - 01 | Gravitation [16-Jul-2025 18:18]",
+      qualities: { "720P": "https://www.youtube.com/embed/wZ12y-6-y28" }
+    },
+    {
+      label: "MAZA-9 - Physics | L - 02 | Gravitation [16-Jul-2025 18:19]",
+      qualities: { "720P": "https://www.youtube.com/embed/Nsu2xjKwkzo" }
+    },
+    {
+      label: "MAZA-9 - Physics | L - 03 | Gravitation [16-Jul-2025 18:20]",
+      qualities: { "720P": "https://www.youtube.com/embed/9XUKM-fNgJ0" }
+    },
+    {
+      label: "MAZA-9 - Physics | L - 04 | Gravitation [16-Jul-2025 18:21]",
+      qualities: { "720P": "https://www.youtube.com/embed/txYj-RkYVJo" }
+    }
+  ], pdfs:[]}
+];
+// -- Render Subjects --
+function renderFolders() {
+  const list = document.getElementById('subjectFolders');
+  list.innerHTML = '';
+  subjects.forEach((subj, idx) => {
+    const folder = document.createElement('div');
+    folder.className = 'folder';
+    folder.innerHTML = `
+      <div class="folder-title-row" onclick="toggleFolder(${idx})">
+        <span class="folder-title">${subj.name}</span>
+        <span class="arrow">&#9654;</span>
+      </div>
+      <div class="folder-content">
+        <div class="section-label">Videos</div>
+        ${
+          subj.videos.map((v,i) => {
+            const qualities = v.qualities || {};
+            const bestUrl = qualities["720P"] || qualities["480P"] || qualities["360P"] || "";
+            let ytBtn = '';
+            if (bestUrl.includes('youtube.com') || bestUrl.includes('youtu.be')) {
+              let youtubeWatch = bestUrl;
+              if (bestUrl.includes('/embed/')) {
+                const match = bestUrl.match(/embed\/([a-zA-Z0-9_-]+)/);
+                if (match) youtubeWatch = `https://www.youtube.com/watch?v=${match[1]}`;
+              }
+              ytBtn = `<button class="youtube-btn" onclick="window.open('${youtubeWatch}','_blank');event.stopPropagation();">YouTube</button>`;
+              return `
+                <button class="video-link-btn" onclick="window.open('${youtubeWatch}','_blank');event.stopPropagation();">${v.label}</button>
+                ${ytBtn}
+              `;
+            } else {
+              return `<button class="video-link-btn" onclick="openVideoModal(${idx},${i});event.stopPropagation();">${v.label}</button>`;
+            }
+          }).join('')
+        }
+        <div class="section-label">PDF/Pages</div>
+        ${
+          subj.pdfs.map(p=>`
+            <button class="pdf-link-btn" onclick="window.open('${p.url}','_blank');event.stopPropagation();">${p.label}</button>
+          `).join('')
+        }
+      </div>
+    `;
+    list.appendChild(folder);
+  });
+}
+function toggleFolder(idx) {
+  const folders = document.querySelectorAll('.folder');
+  folders.forEach((f, i) => {
+    if(i===idx) f.classList.toggle('open');
+    else f.classList.remove('open');
+  });
+}
+renderFolders();
+// -- Video Modal with EAGLE splash, Speed, Quality --
+let currentVidQualities = {};
+function openVideoModal(subjIdx, vidIdx) {
+  let vidObj = subjects[subjIdx].videos[vidIdx];
+  currentVidQualities = vidObj.qualities;
+  let defaultQ = "720P";
+  if(!currentVidQualities[defaultQ]) defaultQ = Object.keys(currentVidQualities)[0];
+  document.getElementById('qualitySel').value = defaultQ;
+  setVideoSource(currentVidQualities[defaultQ]);
+  document.getElementById('speedSel').value = "1x";
+  setVideoSpeed();
+  let bg = document.getElementById('videoModalBg');
+  let splash = document.getElementById('eagleSplash');
+  bg.style.display = 'flex';
+  splash.style.display = 'flex';
+  setTimeout(()=>{splash.style.display='none';},5000);
+}
+function setVideoSource(url) {
+  let v = document.getElementById('modalVideo');
+  let src = document.getElementById('modalVideoSrc');
+  v.pause();
+  src.src = url;
+  v.load();
+}
+function setVideoQuality() {
+  let qual = document.getElementById('qualitySel').value;
+  if(currentVidQualities[qual]) setVideoSource(currentVidQualities[qual]);
+}
+function setVideoSpeed() {
+  let spd = document.getElementById('speedSel').value.replace('x','');
+  document.getElementById('modalVideo').playbackRate = parseFloat(spd);
+}
+function showSplash() {
+  document.getElementById('eagleSplash').style.display = 'flex';
+  setTimeout(()=>{document.getElementById('eagleSplash').style.display='none';},5000);
+}
+function closeVideo() {
+  let v = document.getElementById('modalVideo');
+  v.pause();
+  document.getElementById('videoModalBg').style.display = 'none';
+  document.getElementById('eagleSplash').style.display = 'none';
+}
+</script>
+</body>
+</html>
